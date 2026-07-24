@@ -1,0 +1,23 @@
+/* 1. Estilos generales de la página */
+body {
+    background-color: #1a1a24; /* Fondo oscuro moderno */
+    color: #ffffff;            /* Texto blanco */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    /* Centrar todo el contenido en pantalla */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Ocupa el 100% del alto de la pantalla */
+    margin: 0;
+}
+
+/* 2. Estilo para el título */
+h1 {
+    background-color: #2a2a3a;
+    padding: 20px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 2px solid #6c5ce7;
+    text-align: center;
+}
