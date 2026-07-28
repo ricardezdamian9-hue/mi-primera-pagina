@@ -9,13 +9,13 @@
 
 body {
   background-color: #050508;
-  color: #00ff66; /* Verde fosforescente retro */
+  color: #00ff66;
   font-family: 'Courier New', Courier, monospace;
   padding: 10px;
   line-height: 1.6;
 }
 
-/* EFECTO SCANLINES (Efecto de televisión CRT vieja) */
+/* EFECTO SCANLINES CRT */
 body::before {
   content: "";
   position: fixed;
@@ -26,7 +26,6 @@ body::before {
   pointer-events: none;
 }
 
-/* MARQUESINA SUPERIOR */
 .marquee-wired {
   color: #00f0ff;
   background-color: #111;
@@ -38,16 +37,86 @@ body::before {
 }
 
 /* ==========================================
-   VENTANA PRINCIPAL (ESTILO OS RETRO)
+   LAYOUT EN 3 COLUMNAS PARALELAS
    ========================================== */
-.window {
-  max-width: 800px;
+.layout-tres-columnas {
+  display: flex;
+  gap: 15px;
+  max-width: 1250px;
   margin: 0 auto;
+  align-items: flex-start;
+}
+
+/* 1. LADO IZQUIERDO (RESERVADO) */
+.sidebar-izquierdo {
+  width: 200px;
+}
+
+.placeholder-izq {
+  border-style: dashed;
+  opacity: 0.6;
+}
+
+/* 2. CENTRO (VENTANA DE BLOG) */
+.window {
+  flex: 1;
   border: 2px solid #00f0ff;
   background-color: #0d0d12;
   box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
 }
 
+/* 3. LADO DERECHO (ESTILO CABLES / WIDGETS) */
+.sidebar-derecho {
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* CAJAS Y WIDGETS LATERALES */
+.widget-box {
+  background-color: #0d0d12;
+  border: 1px solid #00f0ff;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.15);
+}
+
+.widget-title {
+  color: #00f0ff;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border-bottom: 1px dashed #00f0ff;
+  padding-bottom: 4px;
+  margin-bottom: 10px;
+}
+
+.img-sidebar {
+  width: 100%;
+  border: 1px solid #00ff66;
+  object-fit: cover;
+}
+
+/* LUCES LED */
+.led {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+.led.verde { background-color: #00ff66; box-shadow: 0 0 5px #00ff66; }
+.led.rojo { background-color: #ff0055; box-shadow: 0 0 5px #ff0055; }
+
+.banners-container {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ==========================================
+   VENTANA Y CONTENIDO DEL BLOG
+   ========================================== */
 .window-header {
   background: #00f0ff;
   color: #000;
@@ -75,13 +144,8 @@ body::before {
   border: 1px solid #ff0055;
 }
 
-.window-body {
-  padding: 20px;
-}
+.window-body { padding: 20px; }
 
-/* ==========================================
-   TEXTOS Y ENCABEZADOS
-   ========================================== */
 .glitch-title {
   color: #ffffff;
   text-shadow: 0 0 10px #00ff66, 0 0 20px #00ff66;
@@ -89,127 +153,128 @@ body::before {
   margin-bottom: 5px;
 }
 
-.subtitle {
-  color: #00f0ff;
-  font-size: 0.95rem;
-}
+.subtitle { color: #00f0ff; font-size: 0.95rem; }
+.linea-retro { border: none; border-top: 1px dashed #00ff66; margin: 15px 0; }
 
-.linea-retro {
-  border: none;
-  border-top: 1px dashed #00ff66;
-  margin: 15px 0;
+/* MENÚ */
+.menu-navegacion { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0; }
+.menu-navegacion a { color: #00f0ff; text-decoration: none; border: 1px solid #00f0ff; padding: 4px 8px; background-color: rgba(0, 240, 255, 0.05); }
+.menu-navegacion a:hover { background-color: #00f0ff; color: #000; }
+
+/* SECCIONES Y POSTS */
+.seccion { margin-top: 30px; }
+.seccion h2 { color: #ff0055; font-size: 1.3rem; border-bottom: 1px solid #ff0055; padding-bottom: 4px; margin-bottom: 15px; }
+
+.contenido-flex { display: flex; gap: 15px; flex-wrap: wrap; align-items: center; }
+.img-perfil { width: 130px; height: 130px; border: 2px solid #00ff66; object-fit: cover; }
+
+.post { background: #12121a; border: 1px solid #333; padding: 15px; margin-bottom: 15px; }
+.post .fecha { color: #888; font-size: 0.8rem; }
+.post h3 { color: #00f0ff; margin: 5px 0; }
+.img-post { width: 100%; max-height: 250px; object-fit: cover; border: 1px solid #00ff66; margin-top: 10px; }
+
+/* GALERÍA */
+.grid-galeria { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+.grid-galeria img { border: 1px solid #00f0ff; width: calc(33.33% - 7px); min-width: 120px; object-fit: cover; }
+
+/* REPRODUCTOR */
+.reproductor-retro { background: #12121a; border: 1px solid #00f0ff; padding: 10px; margin: 15px 0; text-align: center; }
+.reproductor-retro p { color: #00f0ff; font-size: 0.85rem; margin-bottom: 8px; }
+audio { width: 100%; max-width: 400px; height: 30px; filter: invert(100%) hue-rotate(90deg); }
+
+/* CONTACTO */
+.lista-contacto { list-style: none; margin-top: 10px; }
+.lista-contacto li { background-color: #12121a; border: 1px solid #00f0ff; padding: 8px; margin-bottom: 8px; color: #00ff66; }
+.lista-contacto a { color: #00f0ff; text-decoration: underline; }
+.lista-contacto a:hover { background-color: #00f0ff; color: #000; }
+
+/* FOOTER */
+.status-bar { margin-top: 30px; border-top: 1px solid #333; padding-top: 12px; display: flex; justify-content: space-between; font-size: 0.8rem; color: #ff0055; flex-wrap: wrap; }
+.contador { color: #00ff66; border: 1px solid #00ff66; padding: 2px 6px; }
+
+/* RESPONSIVO */
+@media (max-width: 850px) {
+  .layout-tres-columnas { flex-direction: column; }
+  .sidebar-izquierdo, .sidebar-derecho { width: 100%; }
 }
 
 /* ==========================================
-   MENÚ DE NAVEGACIÓN
+   VENTANA FLOTANTE ARRASTRABLE
    ========================================== */
-.menu-navegacion {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin: 10px 0;
+.window-flotante {
+  position: fixed;
+  top: 120px;
+  left: calc(100vw - 320px); /* Esto la ubica a la derecha por defecto */
+  width: 280px;
+  background-color: #0d0d12;
+  border: 2px solid #00f0ff;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+  z-index: 2000;
 }
 
-.menu-navegacion a {
-  color: #00f0ff;
-  text-decoration: none;
-  border: 1px solid #00f0ff;
+.window-header-flotante {
+  background: #00f0ff;
+  color: #000;
   padding: 4px 8px;
-  background-color: rgba(0, 240, 255, 0.05);
+  font-weight: bold;
+  font-size: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: move; /* Indica que se puede arrastrar */
+  user-select: none;
 }
 
-.menu-navegacion a:hover {
-  background-color: #00f0ff;
+.btn-cerrar-mini {
+  background: #ff0055;
+  color: #fff;
+  border: none;
+  padding: 0 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.75rem;
+}
+
+.window-body-flotante {
+  padding: 12px;
+  text-align: center;
+}
+
+.texto-frase {
+  color: #00ff66;
+  font-size: 0.82rem;
+  font-style: italic;
+  margin-bottom: 6px;
+}
+
+.autor-frase {
+  color: #ff0055;
+  font-size: 0.75rem;
+  margin-bottom: 10px;
+}
+
+.btn-retro-mini {
+  background: transparent;
+  color: #00f0ff;
+  border: 1px solid #00f0ff;
+  padding: 3px 8px;
+  font-family: inherit;
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.btn-retro-mini:hover {
+  background: #00f0ff;
   color: #000;
 }
 
-/* ==========================================
-   SECCIONES Y PUBLICACIONES (POSTS)
-   ========================================== */
-.seccion {
-  margin-top: 30px;
+.sidebar-izquierdo {
+  position: sticky;
+  top: 20px; /* Distancia respecto al borde superior al hacer scroll */
 }
 
-.seccion h2 {
-  color: #ff0055;
-  font-size: 1.3rem;
-  border-bottom: 1px solid #ff0055;
-  padding-bottom: 4px;
-  margin-bottom: 15px;
-}
-
-.contenido-flex {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.img-perfil {
-  width: 130px;
-  height: 130px;
-  border: 2px solid #00ff66;
-  object-fit: cover;
-}
-
-.post {
-  background: #12121a;
-  border: 1px solid #333;
-  padding: 15px;
-  margin-bottom: 15px;
-}
-
-.post .fecha {
-  color: #888;
-  font-size: 0.8rem;
-}
-
-.post h3 {
-  color: #00f0ff;
-  margin: 5px 0;
-}
-
-.img-post {
-  width: 100%;
-  max-height: 250px;
-  object-fit: cover;
-  border: 1px solid #00ff66;
-  margin-top: 10px;
-}
-
-/* ==========================================
-   GALERÍA
-   ========================================== */
-.grid-galeria {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-.grid-galeria img {
-  border: 1px solid #00f0ff;
-  width: calc(33.33% - 7px);
-  min-width: 120px;
-  object-fit: cover;
-}
-
-/* ==========================================
-   FOOTER / STATUS BAR
-   ========================================== */
-.status-bar {
-  margin-top: 30px;
-  border-top: 1px solid #333;
-  padding-top: 12px;
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  color: #ff0055;
-  flex-wrap: wrap;
-}
-
-.contador {
-  color: #00ff66;
-  border: 1px solid #00ff66;
-  padding: 2px 6px;
+/* EFECTO KONAMI */
+body.modo-hacker {
+  filter: invert(100%) hue-rotate(180deg) !important;
+  transition: filter 0.3s ease;
 }

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>> WIRED_NODE // GUESTBOOK & DRAW</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- MARQUESINA SUPERIOR -->
+  <marquee class="marquee-wired" scrollamount="6">
+    *** GUESTBOOK & DRAWING NODE *** DEJA TU FIRMA O UN DIBUJO EN LA WIRED ***
+  </marquee>
+
+  <div class="layout-tres-columnas">
+    
+    <!-- COLUMNA IZQUIERDA -->
+    <aside class="sidebar-izquierdo">
+      <!-- WIDGET 1: RELOJ DE SISTEMA -->
+      <div class="widget-box">
+        <div class="widget-title">> SYSTEM_TIME</div>
+        <div id="reloj-terminal" style="font-size: 1.1rem; color: #00ff66; text-align: center; font-weight: bold;">
+          00:00:00
+        </div>
+      </div>
+
+      <!-- WIDGET 2: NAVEGACIÓN -->
+      <div class="widget-box">
+        <div class="widget-title">> NAVIGATION</div>
+        <ul style="list-style: none; padding-left: 0; font-size: 0.8rem;">
+          <li style="margin-bottom: 5px;"><a href="index.html" style="color: #00f0ff; text-decoration: none;">> 00. Index / Home</a></li>
+          <li style="margin-bottom: 5px;"><a href="index.html#sobre-mi" style="color: #00f0ff; text-decoration: none;">> 01. Profile</a></li>
+          <li style="margin-bottom: 5px;"><a href="index.html#entradas" style="color: #00f0ff; text-decoration: none;">> 02. Log Entries</a></li>
+          <li style="margin-bottom: 5px;"><a href="index.html#galeria" style="color: #00f0ff; text-decoration: none;">> 03. Visual Archives</a></li>
+          <li style="margin-bottom: 5px;"><a href="index.html#contacto" style="color: #00f0ff; text-decoration: none;">> 04. Comms</a></li>
+          <li><a href="guestbook.html" style="color: #00ff66; text-decoration: none; font-weight: bold;">> 05. Guestbook & Draw</a></li>
+        </ul>
+      </div>
+
+      <!-- WIDGET 3: ESTADO / MOOD -->
+      <div class="widget-box">
+        <div class="widget-title">> CURRENT_MOOD</div>
+        <div style="font-size: 0.8rem; padding: 5px 0;">
+          <p style="margin-bottom: 5px; color: #00ff66;"><span style="color: #ff0055;">[STATUS]:</span> ONLINE</p>
+          <p style="margin-bottom: 5px; color: #00f0ff;"><span style="color: #ff0055;">[PLAYING]:</span> Arena Breakout: Infinite</p>
+          <p style="margin: 0; color: #aaaaaa; font-style: italic;">"Modificando archivos del nodo..."</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="window">
+      <div class="window-header">
+        <span class="title">NAVI_OS v3.04 // GUESTBOOK_NODE.exe</span>
+        <div class="controls">
+          <button>_</button>
+          <button>□</button>
+          <button class="close">X</button>
+        </div>
+      </div>
+
+      <div class="window-body">
+        <h1 class="glitch-title">> GUESTBOOK & OEKAKI</h1>
+        <p class="subtitle">> Deja un mensaje impreso en la red o dibuja un pixel art / garabato retro.</p>
+
+        <hr class="linea-retro">
+
+        <!-- LIENZO DE DIBUJO (OEKAKI CANVAS) -->
+        <section class="seccion">
+          <h2>> 01. DRAWING_CANVAS (OEKAKI)</h2>
+          <div style="background: #12121a; border: 1px solid #00f0ff; padding: 15px; text-align: center;">
+            
+            <!-- Herramientas del Lienzo -->
+            <div style="margin-bottom: 10px; display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap;">
+              <span style="color: #00f0ff; font-size: 0.8rem;">COLOR:</span>
+              <button onclick="cambiarColor('#00ff66')" style="background: #00ff66; width: 20px; height: 20px; border: 1px solid #fff; cursor: pointer;"></button>
+              <button onclick="cambiarColor('#00f0ff')" style="background: #00f0ff; width: 20px; height: 20px; border: 1px solid #fff; cursor: pointer;"></button>
+              <button onclick="cambiarColor('#ff0055')" style="background: #ff0055; width: 20px; height: 20px; border: 1px solid #fff; cursor: pointer;"></button>
+              <button onclick="cambiarColor('#ffffff')" style="background: #ffffff; width: 20px; height: 20px; border: 1px solid #fff; cursor: pointer;"></button>
+              <button onclick="cambiarColor('#0d0d12')" style="background: #0d0d12; color: #ff0055; border: 1px solid #ff0055; padding: 2px 5px; font-size: 0.7rem; cursor: pointer;">BORRADOR</button>
+              
+              <span style="color: #00f0ff; font-size: 0.8rem; margin-left: 10px;">GROSOR:</span>
+              <input type="range" id="grosorPincel" min="1" max="10" value="2" style="width: 80px;">
+              
+              <button onclick="limpiarLienzo()" style="background: transparent; color: #ff0055; border: 1px solid #ff0055; padding: 3px 8px; font-size: 0.75rem; cursor: pointer;">[LIMPIAR]</button>
+            </div>
+
+            <!-- El Canvas -->
+            <canvas id="lienzoDibujo" width="450" height="250" style="background: #0d0d12; border: 1px solid #00ff66; cursor: crosshair; max-width: 100%;"></canvas>
+            
+            <p style="color: #aaaaaa; font-size: 0.75rem; margin-top: 5px;">Mantén presionado el clic para dibujar sobre el lienzo.</p>
+          </div>
+        </section>
+
+        <!-- SECCIÓN DE FIRMAS Y CHAT DE MENSAJES -->
+        <section class="seccion" style="margin-top: 30px;">
+          <h2>> 02. PUBLIC_MESSAGES</h2>
+          <p style="font-size: 0.85rem; margin-bottom: 10px;">Para dejar un mensaje rápido en texto, también puedes usar la terminal de chat de la derecha:</p>
+          
+          <div style="background: #12121a; border: 1px solid #333; padding: 15px;">
+            <div style="border-bottom: 1px dashed #333; padding-bottom: 8px; margin-bottom: 10px;">
+              <span style="color: #ff0055; font-size: 0.8rem;">[SYSTEM_LOG]</span>
+              <p style="color: #00ff66; font-size: 0.9rem;">"¡Bienvenido al libro de visitas! Deja tus firmas o garabatos."</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="status-bar">
+          <div>STATUS: CONNECTED // GUESTBOOK_NODE</div>
+          <div class="contador"><a href="index.html" style="color: #00ff66; text-decoration: none;">< VOLVER AL INICIO</a></div>
+        </footer>
+      </div>
+    </main>
+
+    <!-- COLUMNA DERECHA -->
+    <aside class="sidebar-derecho">
+      <!-- CHAT EN VIVO DE CBOX -->
+      <div class="widget-box">
+        <div class="widget-title">> WIRED_CHAT</div>
+        <iframe src="https://www3.cbox.ws/box/?boxid=3557932&boxtag=QhmKSP" width="100%" height="250" allowtransparency="yes" allow="autoplay" frameborder="0" marginheight="0" marginwidth="0" scrolling="auto"></iframe>
+      </div>
+
+      <!-- DISCORD STATUS -->
+      <div class="widget-box">
+        <div class="widget-title">> DISCORD_STATUS</div>
+        <div id="discord-widget" style="padding: 5px; font-size: 0.8rem; text-align: center;">
+          <img id="discord-avatar" src="https://i.imgur.com/83p1Xb1.png" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid #00f0ff; margin-bottom: 5px;" alt="Avatar">
+          <div id="discord-user" style="color: #00f0ff; font-weight: bold;">Cargando...</div>
+          <div id="discord-status" style="color: #00ff66; font-size: 0.75rem;">Conectando a red...</div>
+          <div id="discord-activity" style="color: #aaaaaa; font-size: 0.7rem; margin-top: 4px;">—</div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- SCRIPT PARA RELOJ, DISCORD Y DIBUJO -->
+  <script>
+    // 1. RELOJ DE TERMINAL
+    function actualizarReloj() {
+      const ahora = new Date();
+      const horas = String(ahora.getHours()).padStart(2, '0');
+      const minutos = String(ahora.getMinutes()).padStart(2, '0');
+      const segundos = String(ahora.getSeconds()).padStart(2, '0');
+      const el = document.getElementById('reloj-terminal');
+      if(el) el.textContent = `${horas}:${minutos}:${segundos}`;
+    }
+    setInterval(actualizarReloj, 1000);
+    actualizarReloj();
+
+    // 2. CONEXIÓN DISCORD (LANYARD)
+    const DISCORD_ID = '546544317599318027';
+    async function cargarEstadoDiscord() {
+      try {
+        const response = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`);
+        const data = await response.json();
+        if (data.success) {
+          const user = data.data;
+          const avatarUrl = user.discord_user.avatar 
+            ? `https://cdn.discordapp.com/avatars/${DISCORD_ID}/${user.discord_user.avatar}.png`
+            : 'https://i.imgur.com/83p1Xb1.png';
+          document.getElementById('discord-avatar').src = avatarUrl;
+          document.getElementById('discord-user').textContent = user.discord_user.username;
+          document.getElementById('discord-status').textContent = `● ${user.discord_status.toUpperCase()}`;
+          if (user.activities && user.activities.length > 0) {
+            const juego = user.activities.find(a => a.type === 0);
+            document.getElementById('discord-activity').textContent = juego ? `Playing: ${juego.name}` : 'Sin juego activo';
+          } else {
+            document.getElementById('discord-activity').textContent = 'Idle / Standby';
+          }
+        }
+      } catch (error) { console.log('Error Lanyard:', error); }
+    }
+    cargarEstadoDiscord();
+    setInterval(cargarEstadoDiscord, 30000);
+
+    // 3. LÓGICA DEL LIENZO DE DIBUJO (CANVAS)
+    const canvas = document.getElementById('lienzoDibujo');
+    const ctx = canvas.getContext('2d');
+    let dibujando = false;
+    let colorActual = '#00ff66';
+
+    function cambiarColor(color) { colorActual = color; }
+    
+    function limpiarLienzo() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function obtenerPosicion(e) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: (e.clientX - rect.left) * (canvas.width / rect.width),
+        y: (e.clientY - rect.top) * (canvas.height / rect.height)
+      };
+    }
+
+    canvas.addEventListener('mousedown', (e) => {
+      dibujando = true;
+      const pos = obtenerPosicion(e);
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (!dibujando) return;
+      const pos = obtenerPosicion(e);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.strokeStyle = colorActual;
+      ctx.lineWidth = document.getElementById('grosorPincel').value;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    });
+
+    canvas.addEventListener('mouseup', () => dibujando = false);
+    canvas.addEventListener('mouseleave', () => dibujando = false);
+  </script>
+
+
+</body>
+</html>

@@ -4,100 +4,268 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Layer 01 // WIRED ACCESS</title>
-  <!-- Conectamos la hoja de estilo CSS -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- MARQUESINA: Texto en movimiento estilo 2000s -->
+  <!-- MARQUESINA SUPERIOR -->
   <marquee class="marquee-wired" scrollamount="6">
-    *** PRESENT DAY, PRESENT TIME! *** BIENVENIDO A LA WIRED *** BLOG PERSONAL DE [TU NOMBRE] ***
+    *** PRESENT DAY, PRESENT TIME! *** BIENVENIDO A LA WIRED *** BLOG PERSONAL DE TONY ***
   </marquee>
 
-  <!-- CONTENEDOR PRINCIPAL: La ventana de Navi OS -->
-  <div class="window">
-    
-    <!-- BARRA SUPERIOR DE LA VENTANA -->
-    <div class="window-header">
-      <span class="title">NAVI_OS v3.04 // USER_BLOG.exe</span>
-      <div class="controls">
-        <button>_</button>
-        <button>□</button>
-        <button class="close">X</button>
-      </div>
-    </div>
+  <!-- CONTENEDOR CONTENEDOR PRINCIPAL EN 3 PARTES -->
+  <div class="layout-tres-columnas">
 
-    <!-- CONTENIDO DE LA VENTANA -->
-    <div class="window-body">
-      
-      <!-- ENCABEZADO -->
-      <h1 class="glitch-title">PRESENT DAY, PRESENT TIME</h1>
-      <p class="subtitle">> Todos están conectados. Bienvenido a mi espacio personal.</p>
+<!-- COLUMNA IZQUIERDA -->
+<aside class="sidebar-izquierdo">
 
-      <hr class="linea-retro">
-
-      <!-- NAVEGACIÓN Y ENLACES (Menú de secciones) -->
-      <nav class="menu-navegacion">
-        <a href="#sobre-mi">[01. Sobre Mí]</a>
-        <a href="#entradas">[02. Bitácora / Entradas]</a>
-        <a href="#galeria">[03. Galería WIRED]</a>
-        <a href="#contacto">[04. Enlaces / Contacto]</a>
-      </nav>
-
-      <hr class="linea-retro">
-
-      <!-- SECCIÓN 1: SOBRE MÍ -->
-      <section id="sobre-mi" class="seccion">
-        <h2>> 01. SOBRE MÍ</h2>
-        <div class="contenido-flex">
-          <!-- Tu foto o un GIF de avatar -->
-          <img src="imagenes/avatar.png" alt="Mi Avatar" class="img-perfil" onerror="this.src='https://via.placeholder.com/150/000000/00ff66?text=AVATAR'">
-          <div class="texto">
-            <p>¡Hola! Este es mi blog personal con estética retro cyber/Wired.</p>
-            <p>Aquí escribiré sobre mis proyectos, ideas, videojuegos y desarrollo. No importa a dónde vayas, siempre hay una conexión.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECCIÓN 2: ENTRADAS DEL BLOG -->
-      <section id="entradas" class="seccion">
-        <h2>> 02. BITÁCORA DE ENTRADAS</h2>
-        
-        <!-- Entrada 1 -->
-        <article class="post">
-          <span class="fecha">[ FECHA: 2026.07.26 // LAYER_01 ]</span>
-          <h3>Mi primera entrada en la red</h3>
-          <p>Hoy oficialmente inicio mi sitio web. Estar construyendo esto con código HTML y CSS me da control total sobre cómo quiero presentar mis notas sin depender de redes sociales tradicionales.</p>
-          <img src="imagenes/post1.jpg" alt="Imagen del post" class="img-post" onerror="this.src='https://via.placeholder.com/500x200/000000/00f0ff?text=WIRED_NODE'">
-        </article>
-
-        <!-- Entrada 2 (puedes duplicar esta estructura para agregar más) -->
-        <article class="post">
-          <span class="fecha">[ FECHA: 2026.07.25 // LAYER_00 ]</span>
-          <h3>El diseño web de los años 2000</h3>
-          <p>Las páginas de Geocities y los sitios inspirados en anime tenían personalidad propia: barras de sonido, contadores de visitas, marcos de ventanas y colores neón sobre fondos oscuros.</p>
-        </article>
-      </section>
-
-      <!-- SECCIÓN 3: GALERÍA DE IMÁGENES -->
-      <section id="galeria" class="seccion">
-        <h2>> 03. GALERÍA DE IMÁGENES</h2>
-        <p>Capturas, arte y referencias visuales:</p>
-        <div class="grid-galeria">
-          <img src="https://via.placeholder.com/180x180/000000/00ff66?text=IMG_01" alt="Galeria 1">
-          <img src="https://via.placeholder.com/180x180/000000/00f0ff?text=IMG_02" alt="Galeria 2">
-          <img src="https://via.placeholder.com/180x180/000000/ff0055?text=IMG_03" alt="Galeria 3">
-        </div>
-      </section>
-
-      <!-- PIE DE PÁGINA (Footer) -->
-      <footer class="status-bar">
-        <div>STATUS: CONNECTED // IP: 127.0.0.1</div>
-        <div class="contador">Visitas: [ 0 0 0 4 2 1 ]</div>
-      </footer>
-
+  <!-- WIDGET 1: RELOJ DE SISTEMA -->
+  <div class="widget-box">
+    <div class="widget-title">> SYSTEM_TIME</div>
+    <div id="reloj-terminal" style="font-size: 1.1rem; color: #00ff66; text-align: center; font-weight: bold;">
+      00:00:00
     </div>
   </div>
 
+  <!-- WIDGET 2: NAVEGACIÓN RÁPIDA -->
+  <div class="widget-box">
+    <div class="widget-title">> NAVIGATION</div>
+    <ul style="list-style: none; padding-left: 0; font-size: 0.8rem;">
+      <li style="margin-bottom: 5px;"><a href="#sobre-mi" style="color: #00f0ff; text-decoration: none;">> 01. Profile</a></li>
+      <li style="margin-bottom: 5px;"><a href="#entradas" style="color: #00f0ff; text-decoration: none;">> 02. Log Entries</a></li>
+      <li style="margin-bottom: 5px;"><a href="#galeria" style="color: #00f0ff; text-decoration: none;">> 03. Visual Archives</a></li>
+      <li><a href="#contacto" style="color: #00f0ff; text-decoration: none;">> 04. Comms</a></li>
+    </ul>
+  </div>
+
+ <!-- WIDGET DE CHAT EN VIVO -->
+<div class="widget-box">
+  <div class="widget-title">> WIRED_CHAT</div>
+  
+  <iframe src="https://www3.cbox.ws/box/?boxid=3557932&boxtag=QhmKSP" width="100%" height="250" allowtransparency="yes" allow="autoplay" frameborder="0" marginheight="0" marginwidth="0" scrolling="auto"></iframe>
+
+</div>
+
+<!-- WIDGET DE ESTADO / MOOD -->
+<div class="widget-box">
+  <div class="widget-title">> CURRENT_MOOD</div>
+  <div style="font-size: 0.8rem; padding: 5px 0;">
+    <p style="margin-bottom: 5px; color: #00ff66;">
+      <span style="color: #ff0055;">[STATUS]:</span> ONLINE
+    </p>
+    <p style="margin-bottom: 5px; color: #00f0ff;">
+      <span style="color: #ff0055;">[PLAYING]:</span> Arena Breakout: Infinite
+    </p>
+    <p style="margin: 0; color: #aaaaaa; font-style: italic;">
+      "Modificando archivos del nodo..."
+    </p>
+  </div>
+</div>
+
+</aside>
+
+
+    <!-- ==========================================
+         2. CENTRO (TU BLOG Y CONTENIDO)
+         ========================================== -->
+    <main class="window">
+      
+      <!-- BARRA SUPERIOR DE LA VENTANA -->
+      <div class="window-header">
+        <span class="title">NAVI_OS v3.04 // USER_BLOG.exe</span>
+        <div class="controls">
+          <button>_</button>
+          <button>□</button>
+          <button class="close">X</button>
+        </div>
+      </div>
+
+      <!-- CONTENIDO DE LA VENTANA -->
+      <div class="window-body">
+        
+        <h1 class="glitch-title">PRESENT DAY, PRESENT TIME</h1>
+        <p class="subtitle">> Todos están conectados. Bienvenido a mi espacio personal.</p>
+
+        <hr class="linea-retro">
+
+        <!-- MENÚ DE NAVEGACIÓN -->
+        <nav class="menu-navegacion">
+          <a href="#sobre-mi">[01. Sobre Mí]</a>
+          <a href="#entradas">[02. Bitácora / Entradas]</a>
+          <a href="#galeria">[03. Galería WIRED]</a>
+          <a href="#contacto">[04. Enlaces / Contacto]</a>
+          <a href="guestbook.html" style="color: #00f0ff; text-decoration: none;">> 05. Guestbook & Draw</a>
+
+        </nav>
+
+        <!-- REPRODUCTOR MULTIMEDIA CON PLAYLIST -->
+<div class="reproductor-retro">
+  <p style="color: #ff0055; font-size: 0.8rem; margin-bottom: 5px;">> AUDIO_SYSTEM // PLAYER_v2.0</p>
+  
+  <div style="margin-bottom: 10px;">
+    <span id="titulo-pista" style="color: #00ff66; font-weight: bold; font-size: 0.9rem;">Track 01 - Lain OST</span>
+  </div>
+
+  <!-- Controles personalizables -->
+  <div style="display: flex; gap: 8px; justify-content: center; align-items: center; margin-bottom: 10px;">
+    <button onclick="pistaAnterior()" class="btn-retro-mini"><< PREV</button>
+    <button id="btn-play" onclick="alternarPlay()" class="btn-retro-mini">[ PLAY ]</button>
+    <button onclick="siguientePista()" class="btn-retro-mini">NEXT >></button>
+  </div>
+
+  <!-- Lista desplegable de canciones -->
+  <select id="select-playlist" onchange="cambiarPistaDesdeSelect()" style="background: #0d0d12; color: #00f0ff; border: 1px solid #00f0ff; font-family: inherit; font-size: 0.8rem; padding: 3px; width: 80%;">
+    <option value="0">01. Duvet / Lain OST</option>
+    <option value="1">02. Cyberpunk Ambient Track</option>
+    <option value="2">03. Días Azules - Ed Maverick</option>
+  </select>
+
+  <!-- Audio oculto controlado por el JS -->
+  <audio id="reproductor-main" src="Lain.mp3"></audio>
+</div>
+
+        <hr class="linea-retro">
+
+        <!-- SECCIÓN 1: SOBRE MÍ -->
+        <section id="sobre-mi" class="seccion">
+          <h2>> 01. SOBRE MÍ</h2>
+          <div class="contenido-flex">
+            <img src="yo.png" alt="Mi Avatar" class="img-perfil" onerror="this.src='https://via.placeholder.com/150/000000/00ff66?text=AVATAR'">
+            <div class="texto">
+              <p>¡Hola! Este es mi blog personal con estética retro cyber/Wired.</p>
+              <p>Aquí escribiré sobre mis proyectos, ideas, videojuegos y desarrollo. No importa a dónde vayas, siempre hay una conexión.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECCIÓN 2: BITÁCORA -->
+        <section id="entradas" class="seccion">
+          <h2>> 02. BITÁCORA DE ENTRADAS</h2>
+          
+          <article class="post">
+            <span class="fecha">[ FECHA: 2026.07.26 // LAYER_00 ]</span>
+            <h3>Mi primera entrada en la red</h3>
+            <p>Hoy oficialmente inicio mi sitio web. Estar construyendo esto con código HTML y CSS me da control total sobre cómo quiero presentar mis notas sin depender de redes sociales tradicionales.</p>
+            <img src="imagenes/post1.jpg" alt="Imagen del post" class="img-post" onerror="this.src='https://via.placeholder.com/500x200/000000/00f0ff?text=WIRED_NODE'">
+          </article>
+
+          <article class="post">
+            <span class="fecha">[ FECHA: 2026.07.25 // LAYER_01 ]</span>
+            <h3>El diseño web de los años 2000</h3>
+            <p>Las páginas de Geocities y los sitios inspirados en anime tenían personalidad propia: barras de sonido, contadores de visitas, marcos de ventanas y colores neón sobre fondos oscuros.</p>
+          </article>
+
+          <article class="post">
+            <span class="fecha">[ FECHA: 2026.07.28 // LAYER_02 ]</span>
+            <h3>pensando</h3>
+            <p>Que más podria poner.</p>
+          </article>
+        </section>
+
+        <!-- SECCIÓN 3: GALERÍA -->
+        <section id="galeria" class="seccion">
+          <h2>> 03. GALERÍA DE IMÁGENES</h2>
+          <p>Capturas, arte y referencias visuales:</p>
+          <div class="grid-galeria">
+            <img src="https://via.placeholder.com/180x180/000000/00ff66?text=IMG_01" alt="Galeria 1">
+            <img src="https://via.placeholder.com/180x180/000000/00f0ff?text=IMG_02" alt="Galeria 2">
+            <img src="https://via.placeholder.com/180x180/000000/ff0055?text=IMG_03" alt="Galeria 3">
+          </div>
+        </section>
+
+        <!-- SECCIÓN 4: CONTACTO -->
+        <section id="contacto" class="seccion">
+          <h2>> 04. ENLACES Y CONTACTO</h2>
+          <p>Conéctate conmigo en la Wired o envíame un paquete de datos:</p>
+          <ul class="lista-contacto">
+            <li>[EMAIL]: <a href="mailto:ricardezdamian9@gmail.com">ricardezdamian9@gmail.com</a></li>
+            <li>[GITHUB]: <a href="https://github.com/ricardezdamian9-hue" target="_blank">https://github.com/ricardezdamian9-hue</a></li>
+            <li>[DISCORD]: <a href="https://discordapp.com/users/damian041520" target="_blank">damian041520</a></li>
+            <li>[STEAM]: <a href="https://steamcommunity.com/id/eltony2008/" target="_blank">tony</a></li>
+          </ul>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="status-bar">
+          <div>STATUS: CONNECTED // IP: 127.0.0.1</div>
+          <div class="contador">Visitas: [ 0 0 0 4 2 1 ]</div>
+        </footer>
+
+      </div>
+    </main>
+
+
+    <!-- ==========================================
+         3. LADO DERECHO (ESTILO CABLES / WIDGETS)
+         ========================================== -->
+    <aside class="sidebar-derecho">
+      
+      <!-- GIF O IMAGEN DE CABLES / LAIN -->
+      <div class="widget-box">
+        <div class="widget-title">> WIRED_NODE</div>
+        <img src="imagenes/cables-lain.gif" alt="Wired Node" class="img-sidebar" onerror="this.src='https://media.tenor.com/yoYEgCaeUdgAAAAM/computer-anime.gif'">
+      </div>
+
+      <!-- ESTADO DEL SISTEMA CON LEDS -->
+      <div class="widget-box">
+        <div class="widget-title">> SYSTEM_STATUS</div>
+        <div class="led-status">
+          <span class="led verde"></span> NODE_01: ONLINE<br>
+          <span class="led verde"></span> PSYCHE: ACTIVE<br>
+          <span class="led rojo"></span> GOD: LISTENING
+        </div>
+      </div>
+
+<!-- WIDGET DE BOTONES -->
+  <div class="widget-box">
+    <div class="widget-title">> BUTTONS</div>
+    
+    <div class="banners-container">
+      <img src="https://cyber.dabamos.de/88x31/blink-0.gif" alt="Botón 1">
+      <img src="https://cyber.dabamos.de/88x31/c88_01.gif" alt="Botón 2">
+      <img src="https://cyber.dabamos.de/88x31/bluepantsu.gif" alt="Botón 3">
+    </div>
+  </div>
+
+  <!-- WIDGET OPCIÓN A: DISCORD STATUS -->
+<div class="widget-box">
+  <div class="widget-title">> DISCORD_STATUS</div>
+  <div id="discord-widget" style="padding: 5px; font-size: 0.8rem; text-align: center;">
+    <img id="discord-avatar" src="https://i.imgur.com/83p1Xb1.png" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid #00f0ff; margin-bottom: 5px;" alt="Avatar">
+    <div id="discord-user" style="color: #00f0ff; font-weight: bold;">Cargando...</div>
+    <div id="discord-status" style="color: #00ff66; font-size: 0.75rem;">Conectando a red...</div>
+    <div id="discord-activity" style="color: #aaaaaa; font-size: 0.7rem; margin-top: 4px;">—</div>
+  </div>
+</div>
+
+<!-- WIDGET OPCIÓN B: NOW PLAYING (MÚSICA) -->
+<div class="widget-box">
+  <div class="widget-title">> NOW_PLAYING</div>
+  <div style="font-size: 0.8rem; text-align: center; padding: 5px;">
+    <p style="color: #ff0055; font-size: 0.75rem; margin-bottom: 4px;">♪ TRACK_INFO ♪</p>
+    <p id="music-track" style="color: #00ff66; font-weight: bold; margin-bottom: 2px;">Días azules</p>
+    <p id="music-artist" style="color: #00f0ff; font-size: 0.75rem; margin: 0;">Ed Maverick</p>
+  </div>
+</div>
+
+</aside> <!-- Corregido el cierre sobrante -->
+
+  </div> <!-- Cierre de layout-tres-columnas -->
+
+  <!-- VENTANA FLOTANTE DE FRASES (DEBE IR ANTES DEL SCRIPT) -->
+  <div id="ventana-frases" class="window-flotante">
+    <div id="ventana-frases-header" class="window-header-flotante">
+      <span>> SYSTEM_QUOTE.exe</span>
+      <button onclick="cerrarVentanaFrases()" class="btn-cerrar-mini">X</button>
+    </div>
+    <div class="window-body-flotante">
+      <p id="texto-frase" class="texto-frase">"No matter where you go, everyone's connected."</p>
+      <p id="autor-frase" class="autor-frase">— Serial Experiments Lain</p>
+      <button onclick="nuevaFrase()" class="btn-retro-mini">[OTRA FRASE]</button>
+    </div>
+  </div>
+
+  <!-- SCRIPT CARGADO AL FINAL DEL BODY -->
+  <script src="script.js"></script>
 </body>
 </html>
