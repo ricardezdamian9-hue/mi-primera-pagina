@@ -4,7 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>> WIRED_NODE // GUESTBOOK & DRAW</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="style.css">
+  <meta name="description" content="Deja tu firma o un dibujo en la Wired — guestbook interactivo.">
+  <meta property="og:title" content="WIRED_NODE // GUESTBOOK & DRAW">
+  <meta property="og:description" content="Deja tu firma o un dibujo en la Wired.">
+  <meta property="og:type" content="website">
 </head>
 <body>
 
@@ -87,22 +92,37 @@
             </div>
 
             <!-- El Canvas -->
-            <canvas id="lienzoDibujo" width="450" height="250" style="background: #0d0d12; border: 1px solid #00ff66; cursor: crosshair; max-width: 100%;"></canvas>
+            <canvas id="lienzoDibujo" width="450" height="250" style="background: #0d0d12; border: 1px solid #00ff66; cursor: crosshair; max-width: 100%; touch-action: none;"></canvas>
             
-            <p style="color: #aaaaaa; font-size: 0.75rem; margin-top: 5px;">Mantén presionado el clic para dibujar sobre el lienzo.</p>
+            <p style="color: #aaaaaa; font-size: 0.75rem; margin-top: 5px;">Mantén presionado el clic (o el dedo) para dibujar sobre el lienzo.</p>
+            <button onclick="descargarDibujoGuest()" style="background: transparent; color: #00f0ff; border: 1px solid #00f0ff; padding: 3px 8px; font-size: 0.75rem; cursor: pointer; margin-top: 8px;">[GUARDAR PNG]</button>
           </div>
         </section>
 
-        <!-- SECCIÓN DE FIRMAS Y CHAT DE MENSAJES -->
+        <!-- FORMULARIO DE FIRMA -->
         <section class="seccion" style="margin-top: 30px;">
-          <h2>> 02. PUBLIC_MESSAGES</h2>
-          <p style="font-size: 0.85rem; margin-bottom: 10px;">Para dejar un mensaje rápido en texto, también puedes usar la terminal de chat de la derecha:</p>
-          
-          <div style="background: #12121a; border: 1px solid #333; padding: 15px;">
-            <div style="border-bottom: 1px dashed #333; padding-bottom: 8px; margin-bottom: 10px;">
-              <span style="color: #ff0055; font-size: 0.8rem;">[SYSTEM_LOG]</span>
-              <p style="color: #00ff66; font-size: 0.9rem;">"¡Bienvenido al libro de visitas! Deja tus firmas o garabatos."</p>
+          <h2>> 02. DEJA_TU_FIRMA</h2>
+          <p style="font-size: 0.85rem; margin-bottom: 10px;">Escribe tu nombre y un mensaje. Si dibujaste algo arriba, se enviará junto con tu firma.</p>
+
+          <div style="background: #12121a; border: 1px solid #00f0ff; padding: 15px;">
+            <div style="margin-bottom: 10px;">
+              <label style="color: #00f0ff; font-size: 0.8rem; display: block; margin-bottom: 4px;">> NOMBRE:</label>
+              <input type="text" id="guest-nombre" maxlength="40" placeholder="Anónimo_Wired" style="width: 100%; box-sizing: border-box; background: #0d0d12; color: #00ff66; border: 1px solid #00f0ff; font-family: inherit; font-size: 0.85rem; padding: 6px;">
             </div>
+            <div style="margin-bottom: 10px;">
+              <label style="color: #00f0ff; font-size: 0.8rem; display: block; margin-bottom: 4px;">> MENSAJE:</label>
+              <textarea id="guest-mensaje" maxlength="300" rows="3" placeholder="Escribe algo en la Wired..." style="width: 100%; box-sizing: border-box; background: #0d0d12; color: #00ff66; border: 1px solid #00f0ff; font-family: inherit; font-size: 0.85rem; padding: 6px; resize: vertical;"></textarea>
+            </div>
+            <button onclick="guardarEntradaGuest()" style="background: transparent; color: #00ff66; border: 1px solid #00ff66; padding: 5px 12px; font-size: 0.8rem; cursor: pointer;">[TRANSMITIR A LA RED]</button>
+            <span id="guest-status" style="font-size: 0.75rem; margin-left: 8px; color: #ff0055;"></span>
+          </div>
+        </section>
+
+        <!-- LISTA DE FIRMAS RECIBIDAS -->
+        <section class="seccion" style="margin-top: 30px;">
+          <h2>> 03. FIRMAS_RECIBIDAS</h2>
+          <div id="guestbook-historial" style="background: #12121a; border: 1px solid #333; padding: 15px; max-height: 500px; overflow-y: auto;">
+            <p style="color: #00f0ff; font-size: 0.8rem;">Sincronizando con el nodo...</p>
           </div>
         </section>
 
@@ -136,6 +156,9 @@
 
   </div>
 
+  <!-- SDK de Supabase (debe cargar ANTES del script que lo usa) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <!-- SCRIPT PARA RELOJ, DISCORD Y DIBUJO -->
   <script>
     // 1. RELOJ DE TERMINAL
@@ -155,6 +178,7 @@
     async function cargarEstadoDiscord() {
       try {
         const response = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
         if (data.success) {
           const user = data.data;
@@ -170,8 +194,16 @@
           } else {
             document.getElementById('discord-activity').textContent = 'Idle / Standby';
           }
+        } else {
+          throw new Error('Lanyard: success=false');
         }
-      } catch (error) { console.log('Error Lanyard:', error); }
+      } catch (error) {
+        console.log('Error Lanyard:', error);
+        const userEl = document.getElementById('discord-user');
+        const statusEl = document.getElementById('discord-status');
+        if (userEl) userEl.textContent = 'Sin conexión';
+        if (statusEl) statusEl.textContent = 'No se pudo cargar Discord';
+      }
     }
     cargarEstadoDiscord();
     setInterval(cargarEstadoDiscord, 30000);
@@ -215,8 +247,212 @@
 
     canvas.addEventListener('mouseup', () => dibujando = false);
     canvas.addEventListener('mouseleave', () => dibujando = false);
-  </script>
 
+    // Soporte táctil (celular / tablet)
+    function posicionDesdeTouch(e) {
+      const touch = e.touches[0] || e.changedTouches[0];
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: (touch.clientX - rect.left) * (canvas.width / rect.width),
+        y: (touch.clientY - rect.top) * (canvas.height / rect.height)
+      };
+    }
+
+    canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      dibujando = true;
+      const pos = posicionDesdeTouch(e);
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+    }, { passive: false });
+
+    canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      if (!dibujando) return;
+      const pos = posicionDesdeTouch(e);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.strokeStyle = colorActual;
+      ctx.lineWidth = document.getElementById('grosorPincel').value;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    }, { passive: false });
+
+    canvas.addEventListener('touchend', () => dibujando = false);
+
+    // Descargar el lienzo local como PNG
+    function descargarDibujoGuest() {
+      const enlace = document.createElement('a');
+      enlace.download = 'mi_dibujo_wired.png';
+      enlace.href = canvas.toDataURL('image/png');
+      enlace.click();
+    }
+
+    // 4. CONEXIÓN A SUPABASE (GUARDAR Y LISTAR FIRMAS)
+    const SUPABASE_URL = 'https://txyovdetsxlgenimgmdn.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_xwLLjhfJFoMlfzccO-yWYA_3l6Yh6FC';
+    let supabase = null;
+
+    if (window.supabase && typeof window.supabase.createClient === 'function') {
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    } else {
+      console.warn('[WIRED_OS] Supabase no estuvo disponible al inicializar.');
+    }
+
+    async function guardarEntradaGuest() {
+      const statusEl = document.getElementById('guest-status');
+      if (!supabase) {
+        if (statusEl) statusEl.textContent = 'Sin conexión con el servidor.';
+        return;
+      }
+
+      const nombreInput = document.getElementById('guest-nombre');
+      const mensajeInput = document.getElementById('guest-mensaje');
+
+      const nombre = (nombreInput && nombreInput.value.trim()) || 'Anónimo_Wired';
+      const mensaje = mensajeInput ? mensajeInput.value.trim() : '';
+
+      if (!mensaje) {
+        if (statusEl) statusEl.textContent = 'Escribe un mensaje antes de transmitir.';
+        return;
+      }
+
+      if (statusEl) { statusEl.style.color = '#00f0ff'; statusEl.textContent = 'Transmitiendo...'; }
+
+      // Solo adjuntamos el dibujo si el lienzo no está vacío (evita subir imágenes en blanco)
+      const enBlanco = esLienzoVacio();
+      const dibujoBase64 = enBlanco ? null : canvas.toDataURL('image/png');
+
+      const { error } = await supabase.from('guestbook').insert([
+        { nombre: nombre, mensaje: mensaje, dibujo: dibujoBase64 }
+      ]);
+
+      if (error) {
+        console.error('Error al guardar en Supabase:', error);
+        if (statusEl) { statusEl.style.color = '#ff0055'; statusEl.textContent = 'Error al conectar con el nodo central.'; }
+        return;
+      }
+
+      if (statusEl) { statusEl.style.color = '#00ff66'; statusEl.textContent = '¡Firma transmitida con éxito!'; }
+      if (mensajeInput) mensajeInput.value = '';
+      limpiarLienzo();
+      cargarEntradasGuest();
+    }
+
+    // Comprueba si el canvas sigue con el fondo original (nada dibujado)
+    function esLienzoVacio() {
+      const blanco = document.createElement('canvas');
+      blanco.width = canvas.width;
+      blanco.height = canvas.height;
+      return canvas.toDataURL() === blanco.toDataURL();
+    }
+
+    async function cargarEntradasGuest() {
+      const contenedor = document.getElementById('guestbook-historial');
+      if (!contenedor || !supabase) return;
+
+      contenedor.innerHTML = '<p style="color: #00f0ff; font-size: 0.8rem;">Sincronizando con el nodo...</p>';
+
+      const { data: entradas, error } = await supabase
+        .from('guestbook')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(50);
+
+      if (error) {
+        console.error('Error al consultar firmas:', error);
+        contenedor.innerHTML = '<p style="color: #ff0055; font-size: 0.8rem;">Error de conexión con la red.</p>';
+        return;
+      }
+
+      contenedor.innerHTML = '';
+
+      if (!entradas || entradas.length === 0) {
+        contenedor.innerHTML = '<p style="color: #666; font-size: 0.8rem;">No hay firmas todavía. ¡Sé el primero!</p>';
+        return;
+      }
+
+      entradas.forEach(e => {
+        const card = document.createElement('div');
+        card.style.cssText = `
+          border: 1px solid #00f0ff;
+          background: rgba(0, 240, 255, 0.04);
+          padding: 8px;
+          margin-bottom: 10px;
+          font-family: 'Courier New', monospace;
+        `;
+
+        const fechaFormateada = new Date(e.created_at).toLocaleString([], {
+          dateStyle: 'short',
+          timeStyle: 'short'
+        });
+
+        const nombreSeguro = (e.nombre || 'Anónimo_Wired').replace(/</g, '&lt;');
+        const mensajeSeguro = (e.mensaje || '').replace(/</g, '&lt;');
+
+        card.innerHTML = `
+          <div style="color: #00ff66; font-size: 0.85rem; font-weight: bold; display: flex; justify-content: space-between; gap: 10px;">
+            <span>> ${nombreSeguro}</span>
+            <span style="color: #888; font-size: 0.75rem; white-space: nowrap;">${fechaFormateada}</span>
+          </div>
+          <p style="color: #fff; font-size: 0.85rem; margin: 6px 0; white-space: pre-wrap;">${mensajeSeguro}</p>
+          ${e.dibujo ? `<img src="${e.dibujo}" style="border: 1px solid #00ff66; max-width: 100%; height: auto; display: block; margin-top: 5px;">` : ''}
+          <div style="display: flex; gap: 10px; margin-top: 8px; align-items: center;">
+            <button data-id="${e.id}" data-accion="like" style="background: transparent; color: #ff0055; border: 1px solid #ff0055; padding: 2px 8px; font-size: 0.7rem; cursor: pointer;">❤ <span data-likes>${e.likes || 0}</span></button>
+            <button data-id="${e.id}" data-accion="reportar" style="background: transparent; color: #666; border: 1px solid #666; padding: 2px 8px; font-size: 0.7rem; cursor: pointer;">🚩 Reportar</button>
+          </div>
+        `;
+
+        card.querySelector('[data-accion="like"]').addEventListener('click', (ev) => {
+          reaccionarEntradaGuest(e.id, 'likes', ev.currentTarget);
+        });
+        card.querySelector('[data-accion="reportar"]').addEventListener('click', (ev) => {
+          reaccionarEntradaGuest(e.id, 'reportes', ev.currentTarget, true);
+        });
+
+        contenedor.appendChild(card);
+      });
+    }
+
+    // Suma 1 al campo indicado ('likes' o 'reportes') de una firma
+    async function reaccionarEntradaGuest(id, campo, boton, esReporte = false) {
+      if (!supabase) return;
+      boton.disabled = true;
+
+      const { data: fila, error: errorLectura } = await supabase
+        .from('guestbook')
+        .select(campo)
+        .eq('id', id)
+        .single();
+
+      if (errorLectura) {
+        console.error('Error al leer:', errorLectura);
+        boton.disabled = false;
+        return;
+      }
+
+      const nuevoValor = (fila[campo] || 0) + 1;
+      const { error: errorUpdate } = await supabase
+        .from('guestbook')
+        .update({ [campo]: nuevoValor })
+        .eq('id', id);
+
+      if (errorUpdate) {
+        console.error('Error al actualizar:', errorUpdate);
+        boton.disabled = false;
+        return;
+      }
+
+      if (esReporte) {
+        boton.textContent = '🚩 Reportado';
+      } else {
+        const spanLikes = boton.querySelector('[data-likes]');
+        if (spanLikes) spanLikes.textContent = nuevoValor;
+        boton.disabled = false;
+      }
+    }
+
+    cargarEntradasGuest();
+  </script>
 
 </body>
 </html>

@@ -4,9 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Layer 01 // WIRED ACCESS</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="style.css">
+
+  <!-- SEO / Redes sociales -->
+  <meta name="description" content="Blog personal de Tony con estética retro cyber/Wired. Proyectos, ideas, videojuegos y desarrollo.">
+  <meta property="og:title" content="Layer 01 // WIRED ACCESS">
+  <meta property="og:description" content="Blog personal con estética retro cyber/Wired. No importa a dónde vayas, siempre hay una conexión.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://TUDOMINIO.com/yo1.jpeg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Layer 01 // WIRED ACCESS">
+  <meta name="twitter:description" content="Blog personal con estética retro cyber/Wired.">
+  <link rel="alternate" type="application/rss+xml" title="Bitácora RSS" href="feed.xml">
 </head>
 <body>
+
+<canvas id="canvas-red-wired"></canvas>
+
+  <!-- PANTALLA DE CARGA INITIAL -->
+<div id="boot-screen">
+  <div class="boot-text">
+    <p>[ OK ] INITIALIZING NAVI_OS v3.04...</p>
+    <p>[ OK ] MOUNTING MEMORY LAYERS...</p>
+    <p>[ OK ] CONNECTING TO WIRED NODE (127.0.0.1)...</p>
+    <p style="color: #00ff66;">> SYSTEM READY. PRESENT DAY, PRESENT TIME.</p>
+  </div>
+</div>
 
   <!-- MARQUESINA SUPERIOR -->
   <marquee class="marquee-wired" scrollamount="6">
@@ -46,6 +70,15 @@
 
 </div>
 
+<!-- WIDGET: OPCIONES DE VISTA -->
+<div class="widget-box">
+  <div class="widget-title">> VIEW_OPTIONS</div>
+  <div style="display: flex; flex-direction: column; gap: 6px; padding: 5px 0;">
+    <button onclick="alternarModoLectura()" class="btn-retro-mini">[ MODO LECTURA ]</button>
+    <button onclick="alternarScanlines()" class="btn-retro-mini">[ SCANLINES ON/OFF ]</button>
+  </div>
+</div>
+
 <!-- WIDGET DE ESTADO / MOOD -->
 <div class="widget-box">
   <div class="widget-title">> CURRENT_MOOD</div>
@@ -61,6 +94,25 @@
     </p>
   </div>
 </div>
+
+<!-- WIDGET: TERMINAL CLI INTERACTIVA -->
+<div class="widget-box">
+  <div class="widget-title">> TERMINAL_CLI</div>
+  
+  <!-- Historial donde se muestran los comandos y respuestas -->
+  <div id="terminal-history" class="terminal-historial">
+    <p style="color: #888; font-size: 0.7rem;">[WIRED OS v3.04 Ready]</p>
+    <p style="color: #00ff66; font-size: 0.75rem;">Escribe <span style="color: #00f0ff;">'help'</span> para ver comandos.</p>
+  </div>
+
+  <!-- Campo de entrada -->
+  <div class="terminal-prompt-box">
+    <span style="color: #ff0055; font-size: 0.75rem; font-weight: bold;">>$</span>
+    <input type="text" id="terminal-input" placeholder="comando..." autocomplete="off">
+  </div>
+</div>
+
+
 
 </aside>
 
@@ -106,11 +158,29 @@
     <span id="titulo-pista" style="color: #00ff66; font-weight: bold; font-size: 0.9rem;">Track 01 - Lain OST</span>
   </div>
 
+  <!-- Línea de tiempo / progreso -->
+  <div class="player-timeline">
+    <span id="tiempo-actual" class="player-time">0:00</span>
+    <input type="range" id="barra-progreso" class="player-progress" min="0" max="100" value="0" step="0.1">
+    <span id="tiempo-total" class="player-time">0:00</span>
+  </div>
+
+  <!-- Ecualizador visual -->
+  <div class="equilizer-bars" style="justify-content: center; margin: 8px 0;">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
   <!-- Controles personalizables -->
   <div style="display: flex; gap: 8px; justify-content: center; align-items: center; margin-bottom: 10px;">
     <button onclick="pistaAnterior()" class="btn-retro-mini"><< PREV</button>
     <button id="btn-play" onclick="alternarPlay()" class="btn-retro-mini">[ PLAY ]</button>
     <button onclick="siguientePista()" class="btn-retro-mini">NEXT >></button>
+  </div>
+
+  <!-- Volumen -->
+  <div style="display: flex; gap: 6px; justify-content: center; align-items: center; margin-bottom: 10px;">
+    <span style="color: #00f0ff; font-size: 0.75rem;">VOL:</span>
+    <input type="range" id="control-volumen" class="player-volume" min="0" max="100" value="70">
   </div>
 
   <!-- Lista desplegable de canciones -->
@@ -141,12 +211,15 @@
         <!-- SECCIÓN 2: BITÁCORA -->
         <section id="entradas" class="seccion">
           <h2>> 02. BITÁCORA DE ENTRADAS</h2>
+
+          <input type="text" id="buscador-bitacora" class="buscador-bitacora" placeholder="> Buscar en la bitácora...">
+          <p id="buscador-vacio" style="display:none; color:#666; font-size:0.85rem;">No se encontraron entradas.</p>
           
           <article class="post">
             <span class="fecha">[ FECHA: 2026.07.26 // LAYER_00 ]</span>
             <h3>Mi primera entrada en la red</h3>
             <p>Hoy oficialmente inicio mi sitio web. Estar construyendo esto con código HTML y CSS me da control total sobre cómo quiero presentar mis notas sin depender de redes sociales tradicionales.</p>
-            <img src="imagenes/post1.jpg" alt="Imagen del post" class="img-post" onerror="this.src='https://via.placeholder.com/500x200/000000/00f0ff?text=WIRED_NODE'">
+            <img src="imagenes/post1.jpg" alt="Imagen del post" class="img-post" loading="lazy" onerror="this.src='https://via.placeholder.com/500x200/000000/00f0ff?text=WIRED_NODE'">
           </article>
 
           <article class="post">
@@ -167,9 +240,9 @@
           <h2>> 03. GALERÍA DE IMÁGENES</h2>
           <p>Capturas, arte y referencias visuales:</p>
           <div class="grid-galeria">
-            <img src="https://via.placeholder.com/180x180/000000/00ff66?text=IMG_01" alt="Galeria 1">
-            <img src="https://via.placeholder.com/180x180/000000/00f0ff?text=IMG_02" alt="Galeria 2">
-            <img src="https://via.placeholder.com/180x180/000000/ff0055?text=IMG_03" alt="Galeria 3">
+            <img src="yo1.jpeg" alt="Galeria 1" loading="lazy">
+            <img src="nube.jpeg" alt="Galeria 2" loading="lazy">
+            <img src="nube1.jpeg" alt="Galeria 3" loading="lazy">
           </div>
         </section>
 
@@ -182,6 +255,7 @@
             <li>[GITHUB]: <a href="https://github.com/ricardezdamian9-hue" target="_blank">https://github.com/ricardezdamian9-hue</a></li>
             <li>[DISCORD]: <a href="https://discordapp.com/users/damian041520" target="_blank">damian041520</a></li>
             <li>[STEAM]: <a href="https://steamcommunity.com/id/eltony2008/" target="_blank">tony</a></li>
+            <li>[ANILIST]: <a href="https://anilist.co/user/Tonyrv/" target="_blank">Tonyrv</a></li>
           </ul>
         </section>
 
@@ -227,6 +301,19 @@
     </div>
   </div>
 
+  <!-- WIDGET: WEBRING -->
+  <div class="widget-box">
+    <div class="widget-title">> WEBRING</div>
+    <div style="font-size: 0.75rem; text-align: center; padding: 5px;">
+      <p style="color: #aaaaaa; margin-bottom: 6px;">Sitios personales conectados a este nodo:</p>
+      <div style="display: flex; justify-content: space-between; color: #00f0ff;">
+        <a href="#" style="color: #00f0ff; text-decoration: none;">&laquo; ANTERIOR</a>
+        <a href="#" style="color: #00f0ff; text-decoration: none;">ALEATORIO</a>
+        <a href="#" style="color: #00f0ff; text-decoration: none;">SIGUIENTE &raquo;</a>
+      </div>
+    </div>
+  </div>
+
   <!-- WIDGET OPCIÓN A: DISCORD STATUS -->
 <div class="widget-box">
   <div class="widget-title">> DISCORD_STATUS</div>
@@ -248,6 +335,36 @@
   </div>
 </div>
 
+<!-- WIDGET: THEME SWITCHER -->
+<div class="widget-box">
+  <div class="widget-title">> COLOR_SCHEME</div>
+  <div style="display: flex; gap: 5px; justify-content: center; padding: 5px;">
+    <button onclick="cambiarTema('cyan')" style="background: #00f0ff; width: 22px; height: 22px; border: 1px solid #fff; cursor: pointer;" title="Wired Cyan"></button>
+    <button onclick="cambiarTema('green')" style="background: #00ff66; width: 22px; height: 22px; border: 1px solid #fff; cursor: pointer;" title="Matrix Green"></button>
+    <button onclick="cambiarTema('amber')" style="background: #ffb700; width: 22px; height: 22px; border: 1px solid #fff; cursor: pointer;" title="Retro Amber"></button>
+    <button onclick="cambiarTema('purple')" style="background: #b000ff; width: 22px; height: 22px; border: 1px solid #fff; cursor: pointer;" title="Lain Purple"></button>
+  </div>
+</div>
+
+<!-- WIDGET: RECURSOS DEL SISTEMA -->
+<div class="widget-box">
+  <div class="widget-title">> SYSTEM_RESOURCES</div>
+  <div style="font-size: 0.75rem; color: #00ff66;">
+    <div style="margin-bottom: 6px;">
+      <span>CPU: </span><span id="cpu-val">42%</span>
+      <div style="background: #111; border: 1px solid #00f0ff; height: 6px; margin-top: 2px;">
+        <div id="cpu-bar" style="background: #00f0ff; width: 42%; height: 100%; transition: width 0.5s;"></div>
+      </div>
+    </div>
+    <div>
+      <span>RAM: </span><span id="ram-val">1.2 GB / 4.0 GB</span>
+      <div style="background: #111; border: 1px solid #ff0055; height: 6px; margin-top: 2px;">
+        <div id="ram-bar" style="background: #ff0055; width: 30%; height: 100%; transition: width 0.5s;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </aside> <!-- Corregido el cierre sobrante -->
 
   </div> <!-- Cierre de layout-tres-columnas -->
@@ -265,7 +382,66 @@
     </div>
   </div>
 
+<!-- VENTANA FLOTANTE: CONTADOR DE VISITAS -->
+<div id="ventana-contador" class="ventana-flotante">
+  <!-- BARRA DE TÍTULO (ÁREA PARA ARRASTRAR) -->
+  <div id="ventana-contador-header" class="ventana-header">
+    <span class="ventana-titulo">SYS_COUNTER.EXE</span>
+    <button class="btn-cerrar-ventana" onclick="cerrarVentana('ventana-contador')">[X]</button>
+  </div>
+  
+  <!-- CONTENIDO DE LA VENTANA -->
+  <div class="ventana-body">
+    <div class="hit-counter-box">
+      <span id="hit-counter">000000</span>
+    </div>
+  </div>
+</div>
+
+<!-- VENTANA FLOTANTE: BLOC DE NOTAS -->
+<div id="ventana-notas" class="ventana-flotante" style="top: 120px; left: 20px;">
+  <div id="ventana-notas-header" class="ventana-header">
+    <span class="ventana-titulo">MEMO_PAD.EXE</span>
+    <button class="btn-cerrar-ventana" onclick="cerrarVentana('ventana-notas')">[X]</button>
+  </div>
+  <div class="ventana-body">
+    <textarea id="texto-memo" placeholder="Escribe notas aquí..." style="
+      width: 100%; height: 80px; background: #030305; color: #00f0ff; 
+      border: 1px solid #00f0ff; font-family: monospace; font-size: 0.75rem; 
+      resize: none; padding: 4px; box-sizing: border-box;
+    "></textarea>
+  </div>
+</div>
+
+<!-- VENTANA FLOTANTE: MINIJUEGO SNAKE -->
+<div id="ventana-snake" class="ventana-flotante" style="top: 150px; left: 100px; width: 220px;">
+  <div id="ventana-snake-header" class="ventana-header">
+    <span class="ventana-titulo">CYBER_SNAKE.EXE</span>
+    <button class="btn-cerrar-ventana" onclick="cerrarVentana('ventana-snake')">[X]</button>
+  </div>
+  <div class="ventana-body" style="text-align: center;">
+    <canvas id="snake-canvas" width="200" height="200" style="background: #030305; border: 1px solid #00f0ff;"></canvas>
+    <div style="font-size: 0.7rem; color: #00ff66; margin-top: 4px;">SCORE: <span id="snake-score">0</span></div>
+    <button onclick="iniciarSnake()" class="btn-retro-mini" style="margin-top: 4px;">[START / RESET]</button>
+  </div>
+</div>
+
+  <!-- BOTÓN MUTE (sonido dial-up y efectos) -->
+  <button id="btn-mute" class="btn-mute" onclick="alternarSonidoGlobal()">[ 🔊 SONIDO ]</button>
+
   <!-- SCRIPT CARGADO AL FINAL DEL BODY -->
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
+
+  <!-- RED DE SEGURIDAD: fuerza a ocultar el boot-screen aunque algo externo falle o tarde -->
+  <script>
+    setTimeout(function () {
+      var boot = document.getElementById('boot-screen');
+      if (boot && boot.style.display !== 'none') {
+        boot.style.opacity = '0';
+        boot.style.visibility = 'hidden';
+        setTimeout(function () { boot.style.display = 'none'; }, 300);
+      }
+    }, 4000);
+  </script>
 </body>
 </html>

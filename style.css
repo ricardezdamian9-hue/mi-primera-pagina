@@ -78,7 +78,27 @@ body::before {
   background-color: #0d0d12;
   border: 1px solid #00f0ff;
   padding: 10px;
-  box-shadow: 0 0 10px rgba(0, 240, 255, 0.15);
+  position: relative;
+  box-shadow: inset 0 0 10px rgba(0, 240, 255, 0.08), 0 0 8px rgba(0, 240, 255, 0.15);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Efecto de activación al pasar el cursor */
+.widget-box:hover {
+  border-color: #00ff66;
+  box-shadow: inset 0 0 12px rgba(0, 255, 102, 0.15), 0 0 12px rgba(0, 255, 102, 0.3);
+}
+
+/* Cursor parpadeante automático en los títulos de widgets */
+.widget-title::after {
+  content: " _";
+  color: #ff0055;
+  animation: cursor-blink 1s infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 .widget-title {
@@ -180,6 +200,124 @@ body::before {
 /* REPRODUCTOR */
 .reproductor-retro { background: #12121a; border: 1px solid #00f0ff; padding: 10px; margin: 15px 0; text-align: center; }
 .reproductor-retro p { color: #00f0ff; font-size: 0.85rem; margin-bottom: 8px; }
+
+/* CURSOR PERSONALIZADO */
+body {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><circle cx="10" cy="10" r="4" fill="none" stroke="%2300f0ff" stroke-width="2"/></svg>') 10 10, auto;
+}
+a, button, input, select, .btn-retro-mini, [onclick] {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><circle cx="10" cy="10" r="4" fill="%2300ff66" stroke="%2300ff66" stroke-width="2"/></svg>') 10 10, pointer;
+}
+
+/* GLITCH ALEATORIO EN EL TÍTULO */
+@keyframes glitch-random {
+  0%   { transform: translate(0); text-shadow: 0 0 8px rgba(0,240,255,0.7); }
+  20%  { transform: translate(-2px, 1px); text-shadow: 2px 0 #ff0055, -2px 0 #00f0ff; }
+  40%  { transform: translate(2px, -1px); text-shadow: -2px 0 #ff0055, 2px 0 #00f0ff; }
+  60%  { transform: translate(-1px, 0); }
+  100% { transform: translate(0); text-shadow: 0 0 8px rgba(0,240,255,0.7); }
+}
+.glitch-title.glitch-activo {
+  animation: glitch-random 0.25s steps(2, end);
+}
+
+/* MODO LECTURA (oculta columnas laterales) */
+body.modo-lectura .sidebar-izquierdo,
+body.modo-lectura .sidebar-derecho {
+  display: none;
+}
+body.modo-lectura .layout-tres-columnas {
+  grid-template-columns: 1fr;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* BUSCADOR DE BITÁCORA */
+.buscador-bitacora {
+  width: 100%;
+  box-sizing: border-box;
+  background: #0d0d12;
+  color: #00ff66;
+  border: 1px solid #00f0ff;
+  font-family: inherit;
+  font-size: 0.85rem;
+  padding: 6px 8px;
+  margin-bottom: 15px;
+}
+
+/* BOTÓN MUTE (sonido dial-up) */
+.btn-mute {
+  position: fixed;
+  bottom: 12px;
+  right: 12px;
+  z-index: 5000;
+  background: #0d0d12;
+  color: #00f0ff;
+  border: 1px solid #00f0ff;
+  padding: 5px 10px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  font-family: 'Courier New', monospace;
+}
+.btn-mute:hover { background: #00f0ff; color: #000; }
+
+/* LÍNEA DE TIEMPO DEL REPRODUCTOR */
+.player-timeline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.player-time {
+  color: #00ff66;
+  font-size: 0.7rem;
+  min-width: 32px;
+  font-family: 'Courier New', monospace;
+}
+
+/* Slider genérico estilo retro (progreso y volumen comparten look) */
+.player-progress,
+.player-volume {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  height: 4px;
+  background: #0d0d12;
+  border: 1px solid #00f0ff;
+  cursor: pointer;
+  outline: none;
+}
+
+.player-volume { flex: none; width: 100px; }
+
+.player-progress::-webkit-slider-thumb,
+.player-volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  background: #00ff66;
+  border: 1px solid #00ff66;
+  box-shadow: 0 0 6px rgba(0, 255, 102, 0.8);
+  cursor: pointer;
+}
+
+.player-progress::-moz-range-thumb,
+.player-volume::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  background: #00ff66;
+  border: 1px solid #00ff66;
+  box-shadow: 0 0 6px rgba(0, 255, 102, 0.8);
+  cursor: pointer;
+}
+
+.player-progress::-webkit-slider-runnable-track,
+.player-volume::-webkit-slider-runnable-track {
+  height: 4px;
+  background: linear-gradient(to right, #00f0ff var(--progreso, 0%), #222 0%);
+}
 audio { width: 100%; max-width: 400px; height: 30px; filter: invert(100%) hue-rotate(90deg); }
 
 /* CONTACTO */
@@ -277,4 +415,382 @@ audio { width: 100%; max-width: 400px; height: 30px; filter: invert(100%) hue-ro
 body.modo-hacker {
   filter: invert(100%) hue-rotate(180deg) !important;
   transition: filter 0.3s ease;
+}
+
+/* ==========================================
+   ESTILOS DE LA TERMINAL CLI
+   ========================================== */
+.terminal-historial {
+  background-color: #000000;
+  border: 1px solid #1a1a2e;
+  padding: 8px;
+  height: 130px;
+  overflow-y: auto;
+  font-size: 0.75rem;
+  margin-bottom: 8px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.8);
+}
+
+.terminal-historial p {
+  line-height: 1.3;
+  margin-bottom: 4px;
+  word-break: break-word;
+}
+
+.terminal-prompt-box {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #000000;
+  border: 1px solid #00f0ff;
+  padding: 2px 6px;
+}
+
+#terminal-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #00f0ff;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.75rem;
+  outline: none;
+}
+
+#terminal-input::placeholder {
+  color: #555;
+}
+
+/* Personalización de la barra de scroll de la terminal */
+.terminal-historial::-webkit-scrollbar {
+  width: 4px;
+}
+.terminal-historial::-webkit-scrollbar-track {
+  background: #000;
+}
+.terminal-historial::-webkit-scrollbar-thumb {
+  background: #00f0ff;
+}
+
+/* DESACTIVAR SCANLINES */
+body.no-scanlines::before {
+  display: none;
+}
+
+/* Animaciones para LEDs */
+@keyframes pulso-verde {
+  0%, 100% { 
+    box-shadow: 0 0 8px #00ff66; 
+    opacity: 1; 
+  }
+  50% { 
+    box-shadow: 0 0 2px #00ff66; 
+    opacity: 0.5; 
+  }
+}
+
+@keyframes titileo-rojo {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px #ff0055; }
+  20% { opacity: 0.2; box-shadow: none; }
+  25% { opacity: 1; box-shadow: 0 0 8px #ff0055; }
+  80% { opacity: 0.8; }
+}
+
+.led.verde {
+  animation: pulso-verde 2.5s infinite ease-in-out;
+}
+
+.led.rojo {
+  animation: titileo-rojo 3s infinite steps(2, start);
+}
+
+.equilizer-bars {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 3px;
+  height: 18px;
+  margin-top: 5px;
+}
+
+.equilizer-bars span {
+  width: 4px;
+  background-color: #00f0ff;
+  animation: eq-anim 1s infinite ease-in-out alternate;
+}
+
+.equilizer-bars span:nth-child(1) { height: 40%; animation-delay: 0.1s; }
+.equilizer-bars span:nth-child(2) { height: 80%; animation-delay: 0.3s; background-color: #00ff66; }
+.equilizer-bars span:nth-child(3) { height: 30%; animation-delay: 0.5s; }
+.equilizer-bars span:nth-child(4) { height: 100%; animation-delay: 0.2s; background-color: #ff0055; }
+.equilizer-bars span:nth-child(5) { height: 60%; animation-delay: 0.4s; }
+
+@keyframes eq-anim {
+  0% { transform: scaleY(0.2); }
+  100% { transform: scaleY(1); }
+}
+
+.terminal-historial {
+  background-color: #030305;
+  border: 1px solid #00ff66;
+  padding: 8px;
+  height: 130px;
+  overflow-y: auto;
+  font-size: 0.75rem;
+  margin-bottom: 8px;
+  box-shadow: inset 0 0 8px rgba(0, 255, 102, 0.2);
+  text-shadow: 0 0 3px rgba(0, 255, 102, 0.5);
+}
+
+.terminal-prompt-box {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #030305;
+  border: 1px solid #00f0ff;
+  padding: 3px 6px;
+  box-shadow: 0 0 5px rgba(0, 240, 255, 0.2);
+}
+
+/* PANTALLA DE CARGA (BOOT SCREEN) */
+#boot-screen {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background-color: #030305;
+  color: #00f0ff;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.boot-text {
+  border: 1px solid #00f0ff;
+  padding: 20px;
+  background: #0d0d12;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+  max-width: 90%;
+}
+
+/* Por defecto el ecualizador está pausado */
+.equilizer-bars span {
+  width: 4px;
+  background-color: #00f0ff;
+  animation: eq-anim 1s infinite ease-in-out alternate;
+  animation-play-state: paused; /* <--- PAUSADO POR DEFECTO */
+}
+
+/* Clase activa cuando suena la música */
+.equilizer-bars.reproduciendo span {
+  animation-play-state: running;
+}
+
+/* ==========================================
+   EFECTO GLITCH Y ESTILO DE GALERÍA
+   ========================================== */
+
+/* Transición suave para las imágenes de la galería */
+#galeria img {
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  border: 1px solid #00f0ff;
+}
+
+/* Efecto al pasar el cursor (Hover) */
+#galeria img:hover {
+  animation: glitch-jitter 0.2s infinite;
+  /* Desplazamiento RGB (Rojo y Cyan) */
+  filter: contrast(130%) brightness(110%) drop-shadow(-3px 0 0 #ff0055) drop-shadow(3px 0 0 #00f0ff);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+}
+
+/* Animación de sacudida rápida (Jitter) */
+@keyframes glitch-jitter {
+  0% { transform: translate(0, 0) scale(1.03); }
+  25% { transform: translate(-2px, 1px) scale(1.03); }
+  50% { transform: translate(2px, -1px) scale(1.03); }
+  75% { transform: translate(-1px, -2px) scale(1.03); }
+  100% { transform: translate(1px, 2px) scale(1.03); }
+}
+
+/* ==========================================
+   CURSOR PERSONALIZADO RETRO
+   ========================================== */
+body, html {
+  cursor: crosshair; /* Mira de precisión */
+}
+
+/* Cursor interactivo sobre botones, enlaces e inputs */
+a, button, select, input, canvas {
+  cursor: pointer;
+}
+
+/* Efecto de selección de texto en verde neón */
+::selection {
+  background: #00ff66;
+  color: #000000;
+}
+
+#canvas-red-wired {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1; /* Detrás de todo el contenido */
+  background-color: #030305;
+  pointer-events: none; /* No interfiere con clics */
+}
+
+/* ==========================================
+   VENTANAS FLOTANTES Y ARRASTRABLES
+   ========================================== */
+.ventana-flotante {
+  position: fixed;
+  top: 120px;
+  right: 20px;
+  width: 220px;
+  background-color: #0d0d12;
+  border: 1px solid #00f0ff;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3), inset 0 0 10px rgba(0, 240, 255, 0.1);
+  z-index: 9999; /* Siempre al frente */
+}
+
+.ventana-header {
+  background: #00f0ff;
+  color: #030305;
+  padding: 4px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  font-size: 0.75rem;
+  cursor: move; /* Indica que la ventana se puede mover */
+  user-select: none; /* Evita seleccionar texto al arrastrar */
+}
+
+.btn-cerrar-ventana {
+  background: transparent;
+  border: none;
+  color: #030305;
+  font-weight: bold;
+  font-family: monospace;
+  cursor: pointer;
+  padding: 0 2px;
+}
+
+.btn-cerrar-ventana:hover {
+  color: #ff0055;
+  background: #030305;
+}
+
+.ventana-body {
+  padding: 8px;
+}
+
+.hit-counter-box {
+  background-color: #030305;
+  border: 1px solid #00ff66;
+  padding: 6px 10px;
+  text-align: center;
+  box-shadow: inset 0 0 10px rgba(0, 255, 102, 0.2);
+}
+
+#hit-counter {
+  font-family: 'Courier New', monospace;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #00ff66;
+  letter-spacing: 4px;
+  text-shadow: 0 0 8px rgba(0, 255, 102, 0.8);
+}
+
+/* ==========================================
+   MEJORA DEL WIDGET NOW PLAYING (SIDEBAR)
+   ========================================== */
+.now-playing-content {
+  padding: 6px;
+  text-align: center;
+}
+
+.track-marquee {
+  background-color: #030305;
+  border: 1px solid #00f0ff;
+  padding: 4px;
+  margin-bottom: 6px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+#now-playing-title {
+  display: inline-block;
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+  color: #00ff66;
+  text-shadow: 0 0 5px rgba(0, 255, 102, 0.8);
+}
+
+#sidebar-audio-vis {
+  background-color: #030305;
+  border: 1px solid #00f0ff;
+  display: block;
+  margin: 0 auto 6px auto;
+  width: 100%;
+}
+
+.audio-progress-box {
+  margin-bottom: 6px;
+}
+
+.audio-timer {
+  font-family: monospace;
+  font-size: 0.65rem;
+  color: #00f0ff;
+  margin-top: 2px;
+}
+
+.audio-btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.audio-vol-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: monospace;
+  font-size: 0.65rem;
+  color: #00f0ff;
+}
+
+/* Personalización de los deslizadores (Sliders) */
+.now-playing-content input[type=range] {
+  accent-color: #00ff66;
+  height: 4px;
+  cursor: pointer;
+}
+
+#boot-screen {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background-color: #030305;
+  color: #00f0ff;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+/* Agrega esto para que no bloquee clics si se vuelve transparente */
+#boot-screen[style*="opacity: 0"] {
+  pointer-events: none;
 }
