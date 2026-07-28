@@ -1,23 +1,103 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layer 01 // WIRED ACCESS</title>
+  <!-- Conectamos la hoja de estilo CSS -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-   <main class="card">
-        <!-- Imagen de perfil (usamos un avatar temporal de prueba) -->
-        <img class="card-img" src="yo.PNG" alt="Foto de perfil de damian">
-        
-       <h1 class="card-title">¡Hola, soy Tony!</h1>
-<p class="card-description">
-   SOY UN PENDEJO QUE QUIERE PERDER SU PELO
-</p>
 
-<!-- Puedes cambiar el link a tu perfil real de GitHub o LinkedIn -->
-<a href="https://github.com/ricardezdamian9-hue" target="_blank" class="card-btn">Ver mi Perfil</a>
-    </main>
+  <!-- MARQUESINA: Texto en movimiento estilo 2000s -->
+  <marquee class="marquee-wired" scrollamount="6">
+    *** PRESENT DAY, PRESENT TIME! *** BIENVENIDO A LA WIRED *** BLOG PERSONAL DE [TU NOMBRE] ***
+  </marquee>
+
+  <!-- CONTENEDOR PRINCIPAL: La ventana de Navi OS -->
+  <div class="window">
+    
+    <!-- BARRA SUPERIOR DE LA VENTANA -->
+    <div class="window-header">
+      <span class="title">NAVI_OS v3.04 // USER_BLOG.exe</span>
+      <div class="controls">
+        <button>_</button>
+        <button>□</button>
+        <button class="close">X</button>
+      </div>
+    </div>
+
+    <!-- CONTENIDO DE LA VENTANA -->
+    <div class="window-body">
+      
+      <!-- ENCABEZADO -->
+      <h1 class="glitch-title">PRESENT DAY, PRESENT TIME</h1>
+      <p class="subtitle">> Todos están conectados. Bienvenido a mi espacio personal.</p>
+
+      <hr class="linea-retro">
+
+      <!-- NAVEGACIÓN Y ENLACES (Menú de secciones) -->
+      <nav class="menu-navegacion">
+        <a href="#sobre-mi">[01. Sobre Mí]</a>
+        <a href="#entradas">[02. Bitácora / Entradas]</a>
+        <a href="#galeria">[03. Galería WIRED]</a>
+        <a href="#contacto">[04. Enlaces / Contacto]</a>
+      </nav>
+
+      <hr class="linea-retro">
+
+      <!-- SECCIÓN 1: SOBRE MÍ -->
+      <section id="sobre-mi" class="seccion">
+        <h2>> 01. SOBRE MÍ</h2>
+        <div class="contenido-flex">
+          <!-- Tu foto o un GIF de avatar -->
+          <img src="imagenes/avatar.png" alt="Mi Avatar" class="img-perfil" onerror="this.src='https://via.placeholder.com/150/000000/00ff66?text=AVATAR'">
+          <div class="texto">
+            <p>¡Hola! Este es mi blog personal con estética retro cyber/Wired.</p>
+            <p>Aquí escribiré sobre mis proyectos, ideas, videojuegos y desarrollo. No importa a dónde vayas, siempre hay una conexión.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 2: ENTRADAS DEL BLOG -->
+      <section id="entradas" class="seccion">
+        <h2>> 02. BITÁCORA DE ENTRADAS</h2>
+        
+        <!-- Entrada 1 -->
+        <article class="post">
+          <span class="fecha">[ FECHA: 2026.07.26 // LAYER_01 ]</span>
+          <h3>Mi primera entrada en la red</h3>
+          <p>Hoy oficialmente inicio mi sitio web. Estar construyendo esto con código HTML y CSS me da control total sobre cómo quiero presentar mis notas sin depender de redes sociales tradicionales.</p>
+          <img src="imagenes/post1.jpg" alt="Imagen del post" class="img-post" onerror="this.src='https://via.placeholder.com/500x200/000000/00f0ff?text=WIRED_NODE'">
+        </article>
+
+        <!-- Entrada 2 (puedes duplicar esta estructura para agregar más) -->
+        <article class="post">
+          <span class="fecha">[ FECHA: 2026.07.25 // LAYER_00 ]</span>
+          <h3>El diseño web de los años 2000</h3>
+          <p>Las páginas de Geocities y los sitios inspirados en anime tenían personalidad propia: barras de sonido, contadores de visitas, marcos de ventanas y colores neón sobre fondos oscuros.</p>
+        </article>
+      </section>
+
+      <!-- SECCIÓN 3: GALERÍA DE IMÁGENES -->
+      <section id="galeria" class="seccion">
+        <h2>> 03. GALERÍA DE IMÁGENES</h2>
+        <p>Capturas, arte y referencias visuales:</p>
+        <div class="grid-galeria">
+          <img src="https://via.placeholder.com/180x180/000000/00ff66?text=IMG_01" alt="Galeria 1">
+          <img src="https://via.placeholder.com/180x180/000000/00f0ff?text=IMG_02" alt="Galeria 2">
+          <img src="https://via.placeholder.com/180x180/000000/ff0055?text=IMG_03" alt="Galeria 3">
+        </div>
+      </section>
+
+      <!-- PIE DE PÁGINA (Footer) -->
+      <footer class="status-bar">
+        <div>STATUS: CONNECTED // IP: 127.0.0.1</div>
+        <div class="contador">Visitas: [ 0 0 0 4 2 1 ]</div>
+      </footer>
+
+    </div>
+  </div>
+
 </body>
 </html>

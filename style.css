@@ -1,0 +1,215 @@
+/* ==========================================
+   RESET Y ESTILOS GLOBALES
+   ========================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #050508;
+  color: #00ff66; /* Verde fosforescente retro */
+  font-family: 'Courier New', Courier, monospace;
+  padding: 10px;
+  line-height: 1.6;
+}
+
+/* EFECTO SCANLINES (Efecto de televisión CRT vieja) */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%);
+  background-size: 100% 4px;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+/* MARQUESINA SUPERIOR */
+.marquee-wired {
+  color: #00f0ff;
+  background-color: #111;
+  border: 1px solid #00f0ff;
+  padding: 4px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+/* ==========================================
+   VENTANA PRINCIPAL (ESTILO OS RETRO)
+   ========================================== */
+.window {
+  max-width: 800px;
+  margin: 0 auto;
+  border: 2px solid #00f0ff;
+  background-color: #0d0d12;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+}
+
+.window-header {
+  background: #00f0ff;
+  color: #000;
+  padding: 6px 10px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  font-size: 0.85rem;
+}
+
+.window-header .controls button {
+  background: #000;
+  color: #00f0ff;
+  border: 1px solid #00f0ff;
+  padding: 1px 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.window-header .controls .close {
+  background: #ff0055;
+  color: #fff;
+  border: 1px solid #ff0055;
+}
+
+.window-body {
+  padding: 20px;
+}
+
+/* ==========================================
+   TEXTOS Y ENCABEZADOS
+   ========================================== */
+.glitch-title {
+  color: #ffffff;
+  text-shadow: 0 0 10px #00ff66, 0 0 20px #00ff66;
+  font-size: 1.8rem;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  color: #00f0ff;
+  font-size: 0.95rem;
+}
+
+.linea-retro {
+  border: none;
+  border-top: 1px dashed #00ff66;
+  margin: 15px 0;
+}
+
+/* ==========================================
+   MENÚ DE NAVEGACIÓN
+   ========================================== */
+.menu-navegacion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin: 10px 0;
+}
+
+.menu-navegacion a {
+  color: #00f0ff;
+  text-decoration: none;
+  border: 1px solid #00f0ff;
+  padding: 4px 8px;
+  background-color: rgba(0, 240, 255, 0.05);
+}
+
+.menu-navegacion a:hover {
+  background-color: #00f0ff;
+  color: #000;
+}
+
+/* ==========================================
+   SECCIONES Y PUBLICACIONES (POSTS)
+   ========================================== */
+.seccion {
+  margin-top: 30px;
+}
+
+.seccion h2 {
+  color: #ff0055;
+  font-size: 1.3rem;
+  border-bottom: 1px solid #ff0055;
+  padding-bottom: 4px;
+  margin-bottom: 15px;
+}
+
+.contenido-flex {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.img-perfil {
+  width: 130px;
+  height: 130px;
+  border: 2px solid #00ff66;
+  object-fit: cover;
+}
+
+.post {
+  background: #12121a;
+  border: 1px solid #333;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.post .fecha {
+  color: #888;
+  font-size: 0.8rem;
+}
+
+.post h3 {
+  color: #00f0ff;
+  margin: 5px 0;
+}
+
+.img-post {
+  width: 100%;
+  max-height: 250px;
+  object-fit: cover;
+  border: 1px solid #00ff66;
+  margin-top: 10px;
+}
+
+/* ==========================================
+   GALERÍA
+   ========================================== */
+.grid-galeria {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.grid-galeria img {
+  border: 1px solid #00f0ff;
+  width: calc(33.33% - 7px);
+  min-width: 120px;
+  object-fit: cover;
+}
+
+/* ==========================================
+   FOOTER / STATUS BAR
+   ========================================== */
+.status-bar {
+  margin-top: 30px;
+  border-top: 1px solid #333;
+  padding-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #ff0055;
+  flex-wrap: wrap;
+}
+
+.contador {
+  color: #00ff66;
+  border: 1px solid #00ff66;
+  padding: 2px 6px;
+}
