@@ -195,7 +195,7 @@ body::before {
 
 /* GALERÍA */
 .grid-galeria { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
-.grid-galeria img { border: 1px solid #00f0ff; width: calc(33.33% - 7px); min-width: 120px; object-fit: cover; }
+.grid-galeria img { border: 1px solid #00f0ff; width: calc(33.33% - 7px); object-fit: cover; }
 
 /* REPRODUCTOR */
 .reproductor-retro { background: #12121a; border: 1px solid #00f0ff; padding: 10px; margin: 15px 0; text-align: center; }
@@ -343,9 +343,49 @@ audio { width: 100%; max-width: 400px; height: 30px; filter: invert(100%) hue-ro
 .contador { color: #00ff66; border: 1px solid #00ff66; padding: 2px 6px; }
 
 /* RESPONSIVO */
+
+/* Evita que cualquier elemento angosto genere scroll horizontal */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* TABLETS Y PANTALLAS MEDIANAS */
 @media (max-width: 850px) {
   .layout-tres-columnas { flex-direction: column; }
   .sidebar-izquierdo, .sidebar-derecho { width: 100%; }
+  .sidebar-izquierdo { position: static; } /* el sticky no tiene sentido apilado */
+  .grid-galeria img { width: calc(50% - 5px); }
+
+  /* Las ventanas flotantes (frases, snake, etc.) se centran y se hacen más angostas */
+  .window-flotante,
+  .ventana-flotante {
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%);
+    width: min(90vw, 280px) !important;
+  }
+}
+
+/* CELULARES */
+@media (max-width: 480px) {
+  body { padding: 6px; font-size: 0.95rem; }
+  .window-body { padding: 12px; }
+  .glitch-title { font-size: 1.3rem; }
+  .subtitle { font-size: 0.85rem; }
+  .seccion h2 { font-size: 1.1rem; }
+  .marquee-wired { font-size: 0.75rem; }
+  .grid-galeria img { width: 100%; }
+  .img-perfil { width: 100px; height: 100px; }
+  .contenido-flex { justify-content: center; text-align: center; }
+  .status-bar { flex-direction: column; gap: 6px; text-align: center; }
+  .window-header .title { font-size: 0.75rem; }
+
+  /* Los botones de color/tamaño del lienzo en el guestbook se acomodan mejor centrados */
+  .window-flotante,
+  .ventana-flotante {
+    width: min(92vw, 260px) !important;
+  }
 }
 
 /* ==========================================
