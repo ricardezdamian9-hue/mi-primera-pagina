@@ -778,10 +778,10 @@ function iniciarSnake() {
 // 1. Inicializar cliente de Supabase de forma segura
 const SUPABASE_URL = 'https://txyovdetsxlgenimgmdn.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_xwLLjhfJFoMlfzccO-yWYA_3l6Yh6FC';
-let supabase = null;
+let supabaseClient = null;
 
 if (window.supabase && typeof window.supabase.createClient === 'function') {
-  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   window.addEventListener('DOMContentLoaded', actualizarContadorVisitas);
 } else {
   console.warn('[WIRED_OS] Supabase no estuvo disponible al inicializar.');
@@ -793,11 +793,11 @@ if (window.supabase && typeof window.supabase.createClient === 'function') {
 async function actualizarContadorVisitas() {
   const elFlotante = document.getElementById('hit-counter');
   const elFooter = document.querySelector('.contador');
-  if (!supabase) return;
+  if (!supabaseClient) return;
 
   try {
     // 1. Leer el valor actual
-    const { data: actual, error: errorLectura } = await supabase
+    const { data: actual, error: errorLectura } = await supabaseClient
       .from('site_counter')
       .select('visits')
       .eq('id', 1)
@@ -808,7 +808,7 @@ async function actualizarContadorVisitas() {
     const nuevoValor = (actual?.visits || 0) + 1;
 
     // 2. Sumar 1 y guardar
-    const { error: errorUpdate } = await supabase
+    const { error: errorUpdate } = await supabaseClient
       .from('site_counter')
       .update({ visits: nuevoValor })
       .eq('id', 1);
@@ -975,7 +975,7 @@ function limpiarCanvasGuest() {
 
 // Guardar la firma directamente en Supabase
 async function guardarEntradaGuest() {
-  if (!supabase) {
+  if (!supabaseClient) {
     alert('No hay conexión con el servidor Supabase.');
     return;
   }
@@ -996,7 +996,7 @@ async function guardarEntradaGuest() {
   const dibujoBase64 = canvas ? canvas.toDataURL('image/png') : null;
 
   // Insertar en la base de datos remota
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from('guestbook')
     .insert([
       { 
@@ -1021,12 +1021,12 @@ async function guardarEntradaGuest() {
 // Obtener y renderizar todas las firmas desde la nube
 async function cargarEntradasGuest() {
   const contenedor = document.getElementById('guestbook-historial');
-  if (!contenedor || !supabase) return;
+  if (!contenedor || !supabaseClient) return;
 
   contenedor.innerHTML = '<p style="color: #00f0ff; font-size: 0.8rem;">Sincronizando con el nodo...</p>';
 
   // Consultar la base de datos ordenada de más reciente a más antigua
-  const { data: entradas, error } = await supabase
+  const { data: entradas, error } = await supabaseClient
     .from('guestbook')
     .select('*')
     .order('created_at', { ascending: false });

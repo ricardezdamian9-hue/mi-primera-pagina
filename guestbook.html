@@ -346,6 +346,22 @@
       return canvas.toDataURL() === blanco.toDataURL();
     }
 
+    // --- LÍMITE DE REACCIONES POR PERSONA (guardado en este navegador) ---
+    function obtenerReaccionesLocales() {
+      try {
+        const datos = JSON.parse(localStorage.getItem('wired_reacciones'));
+        return datos && datos.likes && datos.reportes ? datos : { likes: [], reportes: [] };
+      } catch (e) {
+        return { likes: [], reportes: [] };
+      }
+    }
+
+    function guardarReaccionLocal(campo, id) {
+      const datos = obtenerReaccionesLocales();
+      if (!datos[campo].includes(id)) datos[campo].push(id);
+      localStorage.setItem('wired_reacciones', JSON.stringify(datos));
+    }
+
     async function cargarEntradasGuest() {
       const contenedor = document.getElementById('guestbook-historial');
       if (!contenedor || !supabaseClient) return;
@@ -389,6 +405,10 @@
         const nombreSeguro = (e.nombre || 'Anónimo_Wired').replace(/</g, '&lt;');
         const mensajeSeguro = (e.mensaje || '').replace(/</g, '&lt;');
 
+        const reaccionesLocales = obtenerReaccionesLocales();
+        const yaDioLike = reaccionesLocales.likes.includes(e.id);
+        const yaReporto = reaccionesLocales.reportes.includes(e.id);
+
         card.innerHTML = `
           <div style="color: #00ff66; font-size: 0.85rem; font-weight: bold; display: flex; justify-content: space-between; gap: 10px;">
             <span>> ${nombreSeguro}</span>
@@ -397,8 +417,8 @@
           <p style="color: #fff; font-size: 0.85rem; margin: 6px 0; white-space: pre-wrap;">${mensajeSeguro}</p>
           ${e.dibujo ? `<img src="${e.dibujo}" style="border: 1px solid #00ff66; max-width: 100%; height: auto; display: block; margin-top: 5px;">` : ''}
           <div style="display: flex; gap: 10px; margin-top: 8px; align-items: center;">
-            <button data-id="${e.id}" data-accion="like" style="background: transparent; color: #ff0055; border: 1px solid #ff0055; padding: 2px 8px; font-size: 0.7rem; cursor: pointer;">❤ <span data-likes>${e.likes || 0}</span></button>
-            <button data-id="${e.id}" data-accion="reportar" style="background: transparent; color: #666; border: 1px solid #666; padding: 2px 8px; font-size: 0.7rem; cursor: pointer;">🚩 Reportar</button>
+            <button data-id="${e.id}" data-accion="like" ${yaDioLike ? 'disabled' : ''} style="background: transparent; color: #ff0055; border: 1px solid #ff0055; padding: 2px 8px; font-size: 0.7rem; cursor: pointer; ${yaDioLike ? 'opacity: 0.5; cursor: not-allowed;' : ''}">❤ <span data-likes>${e.likes || 0}</span></button>
+            <button data-id="${e.id}" data-accion="reportar" ${yaReporto ? 'disabled' : ''} style="background: transparent; color: #666; border: 1px solid #666; padding: 2px 8px; font-size: 0.7rem; cursor: pointer; ${yaReporto ? 'opacity: 0.5; cursor: not-allowed;' : ''}">${yaReporto ? '🚩 Reportado' : '🚩 Reportar'}</button>
           </div>
         `;
 
@@ -447,8 +467,13 @@
       } else {
         const spanLikes = boton.querySelector('[data-likes]');
         if (spanLikes) spanLikes.textContent = nuevoValor;
-        boton.disabled = false;
       }
+
+      // Se guarda para que esta persona no pueda repetir la reacción en esta firma
+      guardarReaccionLocal(campo, id);
+      boton.disabled = true;
+      boton.style.opacity = '0.5';
+      boton.style.cursor = 'not-allowed';
     }
 
     // Carga inicial
