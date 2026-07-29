@@ -10,6 +10,9 @@
   <meta property="og:title" content="WIRED_NODE // GUESTBOOK & DRAW">
   <meta property="og:description" content="Deja tu firma o un dibujo en la Wired.">
   <meta property="og:type" content="website">
+  
+  <!-- SDK de Supabase (se carga aquí primero para estar disponible en todo el archivo) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -156,10 +159,7 @@
 
   </div>
 
-  <!-- SDK de Supabase (debe cargar ANTES del script que lo usa) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <!-- SCRIPT PARA RELOJ, DISCORD Y DIBUJO -->
+  <!-- SCRIPT DE LÓGICA DE LA PÁGINA -->
   <script>
     // 1. RELOJ DE TERMINAL
     function actualizarReloj() {
@@ -290,17 +290,17 @@
     // 4. CONEXIÓN A SUPABASE (GUARDAR Y LISTAR FIRMAS)
     const SUPABASE_URL = 'https://txyovdetsxlgenimgmdn.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_xwLLjhfJFoMlfzccO-yWYA_3l6Yh6FC';
-    let supabase = null;
+    let supabaseClient = null;
 
     if (window.supabase && typeof window.supabase.createClient === 'function') {
-      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     } else {
       console.warn('[WIRED_OS] Supabase no estuvo disponible al inicializar.');
     }
 
     async function guardarEntradaGuest() {
       const statusEl = document.getElementById('guest-status');
-      if (!supabase) {
+      if (!supabaseClient) {
         if (statusEl) statusEl.textContent = 'Sin conexión con el servidor.';
         return;
       }
@@ -318,11 +318,11 @@
 
       if (statusEl) { statusEl.style.color = '#00f0ff'; statusEl.textContent = 'Transmitiendo...'; }
 
-      // Solo adjuntamos el dibujo si el lienzo no está vacío (evita subir imágenes en blanco)
+      // Solo adjuntamos el dibujo si el lienzo no está vacío
       const enBlanco = esLienzoVacio();
       const dibujoBase64 = enBlanco ? null : canvas.toDataURL('image/png');
 
-      const { error } = await supabase.from('guestbook').insert([
+      const { error } = await supabaseClient.from('guestbook').insert([
         { nombre: nombre, mensaje: mensaje, dibujo: dibujoBase64 }
       ]);
 
@@ -338,7 +338,7 @@
       cargarEntradasGuest();
     }
 
-    // Comprueba si el canvas sigue con el fondo original (nada dibujado)
+    // Comprueba si el canvas sigue con el fondo original
     function esLienzoVacio() {
       const blanco = document.createElement('canvas');
       blanco.width = canvas.width;
@@ -348,11 +348,11 @@
 
     async function cargarEntradasGuest() {
       const contenedor = document.getElementById('guestbook-historial');
-      if (!contenedor || !supabase) return;
+      if (!contenedor || !supabaseClient) return;
 
       contenedor.innerHTML = '<p style="color: #00f0ff; font-size: 0.8rem;">Sincronizando con el nodo...</p>';
 
-      const { data: entradas, error } = await supabase
+      const { data: entradas, error } = await supabaseClient
         .from('guestbook')
         .select('*')
         .order('created_at', { ascending: false })
@@ -415,10 +415,10 @@
 
     // Suma 1 al campo indicado ('likes' o 'reportes') de una firma
     async function reaccionarEntradaGuest(id, campo, boton, esReporte = false) {
-      if (!supabase) return;
+      if (!supabaseClient) return;
       boton.disabled = true;
 
-      const { data: fila, error: errorLectura } = await supabase
+      const { data: fila, error: errorLectura } = await supabaseClient
         .from('guestbook')
         .select(campo)
         .eq('id', id)
@@ -431,7 +431,7 @@
       }
 
       const nuevoValor = (fila[campo] || 0) + 1;
-      const { error: errorUpdate } = await supabase
+      const { error: errorUpdate } = await supabaseClient
         .from('guestbook')
         .update({ [campo]: nuevoValor })
         .eq('id', id);
@@ -451,6 +451,7 @@
       }
     }
 
+    // Carga inicial
     cargarEntradasGuest();
   </script>
 

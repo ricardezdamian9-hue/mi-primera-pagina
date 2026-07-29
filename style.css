@@ -232,6 +232,18 @@ body.modo-lectura .layout-tres-columnas {
   margin: 0 auto;
 }
 
+/* BOTÓN FLOTANTE PARA SALIR DEL MODO LECTURA */
+.btn-salir-lectura {
+  display: none;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 10000;
+}
+body.modo-lectura .btn-salir-lectura {
+  display: block;
+}
+
 /* BUSCADOR DE BITÁCORA */
 .buscador-bitacora {
   width: 100%;
