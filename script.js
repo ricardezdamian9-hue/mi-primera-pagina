@@ -795,7 +795,27 @@ async function actualizarContadorVisitas() {
   const elFooter = document.querySelector('.contador');
   if (!supabaseClient) return;
 
+  // Si esta pestaña/sesión ya sumó una visita, solo mostramos el valor actual
+  // sin volver a incrementar (evita que F5 / recargas infle el contador).
+  const yaContadoEstaSesion = sessionStorage.getItem('visita_contada') === 'true';
+
   try {
+    if (yaContadoEstaSesion) {
+      // Solo leer y mostrar, sin sumar
+      const { data: actual, error: errorLectura } = await supabaseClient
+        .from('site_counter')
+        .select('visits')
+        .eq('id', 1)
+        .single();
+
+      if (errorLectura) throw errorLectura;
+
+      const formateado = String(actual?.visits || 0).padStart(6, '0');
+      if (elFlotante) elFlotante.textContent = formateado;
+      if (elFooter) elFooter.textContent = `Visitas: [ ${formateado.split('').join(' ')} ]`;
+      return;
+    }
+
     // 1. Leer el valor actual
     const { data: actual, error: errorLectura } = await supabaseClient
       .from('site_counter')
@@ -814,6 +834,9 @@ async function actualizarContadorVisitas() {
       .eq('id', 1);
 
     if (errorUpdate) throw errorUpdate;
+
+    // Marcar esta sesión como ya contada (se resetea al cerrar el navegador/pestaña)
+    sessionStorage.setItem('visita_contada', 'true');
 
     // 3. Mostrarlo en pantalla, con ceros a la izquierda (6 dígitos)
     const formateado = String(nuevoValor).padStart(6, '0');
