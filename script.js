@@ -1098,6 +1098,25 @@ if (window.supabase && typeof window.supabase.createClient === 'function') {
 }
 
 /* ==========================================
+   REGISTRO DISCRETO DE ORIGEN DE VISITAS
+   ========================================== */
+async function registrarOrigenVisita() {
+  if (!supabaseClient) return;
+  try {
+    const geoRes = await fetch('https://ipapi.co/json/');
+    const geo = await geoRes.json();
+
+    await supabaseClient.from('visitas_log').insert({
+      referrer: document.referrer || 'directo',
+      pais: geo.country_name || null,
+      ciudad: geo.city || null,
+    });
+  } catch {
+    // Si falla la geolocalización, simplemente no se registra ese dato — no afecta el resto del sitio
+  }
+}
+
+/* ==========================================
    CONTADOR DE VISITAS (SUPABASE)
    ========================================== */
 async function actualizarContadorVisitas() {
@@ -1147,6 +1166,7 @@ async function actualizarContadorVisitas() {
 
     // Marcar esta sesión como ya contada (se resetea al cerrar el navegador/pestaña)
     sessionStorage.setItem('visita_contada', 'true');
+    registrarOrigenVisita(); // registro silencioso de país/ciudad/referrer, no se muestra en pantalla
 
     // 3. Mostrarlo en pantalla, con ceros a la izquierda (6 dígitos)
     const formateado = String(nuevoValor).padStart(6, '0');
