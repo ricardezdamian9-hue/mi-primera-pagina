@@ -63,8 +63,9 @@
     <ul style="list-style: none; padding-left: 0; font-size: 0.8rem;">
       <li style="margin-bottom: 5px;"><a href="#sobre-mi" style="color: #00f0ff; text-decoration: none;">> 01. Profile</a></li>
       <li style="margin-bottom: 5px;"><a href="#entradas" style="color: #00f0ff; text-decoration: none;">> 02. Log Entries</a></li>
-      <li style="margin-bottom: 5px;"><a href="#galeria" style="color: #00f0ff; text-decoration: none;">> 03. Visual Archives</a></li>
-      <li><a href="#contacto" style="color: #00f0ff; text-decoration: none;">> 04. Comms</a></li>
+      <li style="margin-bottom: 5px;"><a href="#archivo" style="color: #00f0ff; text-decoration: none;">> 03. Timeline</a></li>
+      <li style="margin-bottom: 5px;"><a href="#galeria" style="color: #00f0ff; text-decoration: none;">> 04. Visual Archives</a></li>
+      <li><a href="#contacto" style="color: #00f0ff; text-decoration: none;">> 05. Comms</a></li>
     </ul>
   </div>
 
@@ -101,6 +102,12 @@
   </div>
 </div>
 
+<!-- WIDGET: ANILIST STATUS -->
+<div class="widget-box">
+  <div class="widget-title">> ANILIST_STATUS</div>
+  <div id="anilist-widget" style="text-align:center; font-size:0.8rem; padding: 5px 0;">Cargando...</div>
+</div>
+
 <!-- WIDGET: TERMINAL CLI INTERACTIVA -->
 <div class="widget-box">
   <div class="widget-title">> TERMINAL_CLI</div>
@@ -116,6 +123,16 @@
     <span style="color: #ff0055; font-size: 0.75rem; font-weight: bold;">>$</span>
     <input type="text" id="terminal-input" placeholder="comando..." autocomplete="off">
   </div>
+</div>
+
+<!-- WIDGET: LOGROS DE COMANDOS SECRETOS -->
+<div class="widget-box">
+  <div class="widget-title">> SECRETS_FOUND</div>
+  <div style="text-align: center; font-size: 0.9rem; color: #00ff66; font-weight: bold; margin-bottom: 8px;">
+    <span id="secretos-contador">0 / 0</span>
+  </div>
+  <ul id="secretos-lista" style="list-style: none; padding-left: 0; font-size: 0.7rem; margin: 0;"></ul>
+  <p style="color: #555; font-size: 0.65rem; margin-top: 6px; margin-bottom: 0;">Hay comandos ocultos en la terminal. La Wired premia a quien busca.</p>
 </div>
 
 
@@ -150,9 +167,10 @@
         <nav class="menu-navegacion">
           <a href="#sobre-mi">[01. Sobre Mí]</a>
           <a href="#entradas">[02. Bitácora / Entradas]</a>
-          <a href="#galeria">[03. Galería WIRED]</a>
-          <a href="#contacto">[04. Enlaces / Contacto]</a>
-          <a href="guestbook.html" style="color: #00f0ff; text-decoration: none;">> 05. Guestbook & Draw</a>
+          <a href="#archivo">[03. Archivo / Timeline]</a>
+          <a href="#galeria">[04. Galería WIRED]</a>
+          <a href="#contacto">[05. Enlaces / Contacto]</a>
+          <a href="guestbook.html" style="color: #00f0ff; text-decoration: none;">> 06. Guestbook & Draw</a>
 
         </nav>
 
@@ -241,9 +259,18 @@
           </article>
         </section>
 
+        <!-- SECCIÓN: ARCHIVO / TIMELINE (se genera solo a partir de tus posts) -->
+        <section id="archivo" class="seccion">
+          <h2>> 03. ARCHIVO / TIMELINE</h2>
+          <p style="color: #aaaaaa; font-size: 0.85rem; margin-bottom: 10px;">Registro cronológico de todas las capas de la bitácora:</p>
+          <div id="lista-archivo" class="lista-archivo">
+            <p style="color: #666; font-size: 0.8rem;">Cargando registros...</p>
+          </div>
+        </section>
+
         <!-- SECCIÓN 3: GALERÍA -->
         <section id="galeria" class="seccion">
-          <h2>> 03. GALERÍA DE IMÁGENES</h2>
+          <h2>> 04. GALERÍA DE IMÁGENES</h2>
           <p>Capturas, arte y referencias visuales:</p>
           <div class="grid-galeria">
             <img src="yo1.jpeg" alt="Galeria 1" loading="lazy">
@@ -251,11 +278,48 @@
             <img src="nube1.jpeg" alt="Galeria 3" loading="lazy">
             <img src="yo2.jpeg" alt="Galeria 4" loading="lazy">
           </div>
+
+          <!-- ==========================================================
+               VISTA PREVIA: GALERÍA POR CATEGORÍAS
+               OCULTA POR AHORA. Para activarla, quita style="display:none;"
+               del div#galeria-categorizada de abajo (o pídeselo a Claude).
+               ========================================================== -->
+          <div id="galeria-categorizada" style="display:none; margin-top: 25px; border-top: 1px dashed #333; padding-top: 20px;">
+            <p style="color: #ff0055; font-size: 0.75rem; margin-bottom: 10px;">[ VISTA PREVIA // EN PRUEBA ]</p>
+
+            <div class="tabs-galeria">
+              <button class="tab-galeria activo" onclick="cambiarCategoriaGaleria('nube', this)">[ NUBE ]</button>
+              <button class="tab-galeria" onclick="cambiarCategoriaGaleria('paisajes', this)">[ PAISAJES ]</button>
+              <button class="tab-galeria" onclick="cambiarCategoriaGaleria('yo', this)">[ YO ]</button>
+              <button class="tab-galeria" onclick="cambiarCategoriaGaleria('arte', this)">[ ARTE Y PROYECTOS ]</button>
+            </div>
+
+            <div class="grid-galeria categoria-imgs" data-categoria="nube">
+              <img src="nube.jpeg" alt="Nube 1" loading="lazy">
+              <img src="nube1.jpeg" alt="Nube 2" loading="lazy">
+            </div>
+
+            <div class="grid-galeria categoria-imgs" data-categoria="paisajes" style="display:none;">
+              <img src="paisajes/paisaje1.jpg" alt="Paisaje 1" loading="lazy" onerror="this.src='https://via.placeholder.com/400x250/000000/00f0ff?text=PAISAJE'">
+              <img src="paisajes/paisaje2.jpg" alt="Paisaje 2" loading="lazy" onerror="this.src='https://via.placeholder.com/400x250/000000/00f0ff?text=PAISAJE'">
+            </div>
+
+            <div class="grid-galeria categoria-imgs" data-categoria="yo" style="display:none;">
+              <img src="yo.png" alt="Yo 1" loading="lazy">
+              <img src="yo1.jpeg" alt="Yo 2" loading="lazy">
+              <img src="yo2.jpeg" alt="Yo 3" loading="lazy">
+            </div>
+
+            <div class="grid-galeria categoria-imgs" data-categoria="arte" style="display:none;">
+              <img src="arte/proyecto1.jpg" alt="Arte / Proyecto 1" loading="lazy" onerror="this.src='https://via.placeholder.com/400x250/000000/00f0ff?text=ARTE+%2F+PROYECTO'">
+              <img src="arte/proyecto2.jpg" alt="Arte / Proyecto 2" loading="lazy" onerror="this.src='https://via.placeholder.com/400x250/000000/00f0ff?text=ARTE+%2F+PROYECTO'">
+            </div>
+          </div>
         </section>
 
         <!-- SECCIÓN 4: CONTACTO -->
         <section id="contacto" class="seccion">
-          <h2>> 04. ENLACES Y CONTACTO</h2>
+          <h2>> 05. ENLACES Y CONTACTO</h2>
           <p>Conéctate conmigo en la Wired o envíame un paquete de datos:</p>
           <ul class="lista-contacto">
             <li>[EMAIL]: <a href="mailto:ricardezdamian9@gmail.com">ricardezdamian9@gmail.com</a></li>
@@ -269,6 +333,7 @@
         <!-- FOOTER -->
         <footer class="status-bar">
           <div>STATUS: CONNECTED // IP: 127.0.0.1</div>
+          <a href="feed.xml" class="rss-link" title="Suscríbete a la bitácora vía RSS">[ 📡 RSS ]</a>
           <div class="contador">Visitas: [ 0 0 0 4 2 1 ]</div>
         </footer>
 
@@ -316,6 +381,23 @@
     </div>
   </div>
 
+  <!-- WIDGET: POSTERS DE ANIME (3 por fila) -->
+  <div class="widget-box">
+    <div class="widget-title">> ANIME_LIST</div>
+    <div class="grid-posters">
+      <img src="posters/anime1.jpg" alt="Serial Experiments Lain" data-link="#" loading="lazy" onerror="this.src='https://s3.zerochan.net/240/42/48/4339942.avif'">
+      <img src="posters/anime2.jpg" alt="Neon Genesis Evangelion" data-link="#" loading="lazy" onerror="this.src='https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/49ef3c1d-3d39-4b02-9d72-75da0131e3c4/df93g11-e9672b9a-d717-4a0a-92f9-faf94dead064.png/v1/fit/w_828,h_1104,q_70,strp/a_silent_voice__koe_no_katachi__poster_by_chusecubr_df93g11-414w-2x.jpg'">
+      <img src="posters/anime3.jpg" alt="Akira" data-link="#" loading="lazy" onerror="this.src='https://static.zerochan.net/Toki.wo.Kakeru.Shoujo.1024.120412.webp'">
+      <img src="posters/anime4.jpg" alt="Cowboy Bebop" data-link="#" loading="lazy" onerror="this.src='https://i.pinimg.com/1200x/76/5d/19/765d190767ac51b7dd6e2af50cea5c1d.jpg'">
+      <img src="posters/anime5.jpg" alt="JoJo's Bizarre Adventure" data-link="#" loading="lazy" onerror="this.src='https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20966-HboUtUzEKWl6.jpg'">
+      <img src="posters/anime6.jpg" alt="One Piece" data-link="#" loading="lazy" onerror="this.src='https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx3712-zt0ac4fjixWl.jpg'">
+    </div>
+    <p style="color: #555; font-size: 0.65rem; margin-top: 6px; margin-bottom: 0;">Click en un poster para verlo en grande.</p>
+  </div>
+
+  <!-- WIDGET: "ACTUALIZACIÓN DEL SISTEMA" (meme clásico, visible a propósito, no es un secreto) -->
+
+
   <!-- WIDGET: WEBRING -->
   <div class="widget-box">
     <div class="widget-title">> WEBRING</div>
@@ -337,6 +419,14 @@
     <div id="discord-user" style="color: #00f0ff; font-weight: bold;">Cargando...</div>
     <div id="discord-status" style="color: #00ff66; font-size: 0.75rem;">Conectando a red...</div>
     <div id="discord-activity" style="color: #aaaaaa; font-size: 0.7rem; margin-top: 4px;">—</div>
+  </div>
+</div>
+
+<!-- WIDGET: STEAM STATUS -->
+<div class="widget-box">
+  <div class="widget-title">> STEAM_STATUS</div>
+  <div style="padding: 5px; font-size: 0.8rem; text-align: center;">
+    <a href="https://steamcommunity.com/id/eltony2008/" target="_blank" rel="noopener" class="btn-retro-mini" style="display:inline-block; text-decoration:none;">[ VER MI STEAM ]</a>
   </div>
 </div>
 
@@ -440,6 +530,35 @@
     <button onclick="iniciarSnake()" class="btn-retro-mini" style="margin-top: 4px;">[START / RESET]</button>
   </div>
 </div>
+
+  <!-- VENTANA FLOTANTE OCULTA: EASTER EGG (solo se abre escribiendo un comando secreto en la terminal) -->
+  <div id="ventana-secreta" class="ventana-flotante" style="display: none; top: 160px; left: 140px; width: 260px;">
+    <div id="ventana-secreta-header" class="ventana-header">
+      <span class="ventana-titulo">???.EXE</span>
+      <button class="btn-cerrar-ventana" onclick="cerrarVentana('ventana-secreta')">[X]</button>
+    </div>
+    <div class="ventana-body">
+      <p style="color: #ff0055; font-size: 0.75rem; margin-bottom: 6px;">[ TRANSMISIÓN NO AUTORIZADA ]</p>
+      <p style="color: #00ff66; font-size: 0.8rem; margin-bottom: 8px;">Encontraste una capa oculta de la Wired. No todos los nodos son visibles a simple vista.</p>
+      <p style="color: #00f0ff; font-size: 0.8rem; font-style: italic; margin: 0;">"Close the world, open the nExt."</p>
+    </div>
+  </div>
+
+  <!-- VENTANA FLOTANTE: "ACTUALIZACIÓN DEL SISTEMA" (rickroll clásico, bien visible, no es secreto) -->
+  <div id="ventana-rickroll" class="ventana-flotante" style="display: none; top: 140px; left: 160px; width: 300px;">
+    <div id="ventana-rickroll-header" class="ventana-header">
+      <span class="ventana-titulo">SYSTEM_UPDATE.EXE</span>
+      <button class="btn-cerrar-ventana" onclick="cerrarVentana('ventana-rickroll')">[X]</button>
+    </div>
+    <div class="ventana-body" style="padding: 0;">
+      <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+        <iframe id="rickroll-iframe" src="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allow="autoplay"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTÓN COMPARTIR (copia el link del sitio / abre el menú nativo de compartir) -->
+  <button id="btn-compartir-pagina" class="btn-mute btn-compartir-pagina" onclick="compartirPagina()">[ 🔗 COMPARTIR ]</button>
 
   <!-- BOTÓN MUTE (sonido dial-up y efectos) -->
   <button id="btn-mute" class="btn-mute" onclick="alternarSonidoGlobal()">[ 🔊 SONIDO ]</button>

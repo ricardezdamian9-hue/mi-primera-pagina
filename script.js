@@ -236,6 +236,136 @@ function cambiarPistaDesdeSelect() {
 }
 
 /* ==========================================
+   4B. COMANDOS SECRETOS DE LA TERMINAL (EASTER EGGS)
+   ========================================== */
+const secretosWired = [
+  {
+    id: 'lain',
+    comandos: ['lain'],
+    nombre: 'Capa Oculta // Serial Experiments Lain',
+    accion: () => {
+      imprimirEnTerminal('[ACCESO CONCEDIDO] Descifrando canal oculto...');
+      abrirVentanaSecreta();
+    }
+  },
+  {
+    id: 'jojo',
+    comandos: ['za warudo', 'jojo', 'toki wo tomare'],
+    nombre: 'ZA WARUDO // JoJo\'s Bizarre Adventure',
+    accion: () => {
+      imprimirEnTerminal('¡TOKI WO TOMARE!\n> El tiempo se ha detenido...');
+      activarTiempoDetenido();
+    }
+  },
+  {
+    id: 'akira',
+    comandos: ['akira', 'tetsuo', 'neo-tokyo', 'neo tokyo'],
+    nombre: 'Neo-Tokyo // Akira',
+    accion: () => {
+      imprimirEnTerminal('NEO-TOKYO ESTÁ A PUNTO DE...\n[ADVERTENCIA] Nivel de energía psíquica crítico detectado.\n> TETSUOOOOO!!');
+    }
+  },
+  {
+    id: 'evangelion',
+    comandos: ['eva', 'nerv', 'shinji', 'unit 01'],
+    nombre: 'Unidad EVA // Neon Genesis Evangelion',
+    accion: () => {
+      imprimirEnTerminal('SINCRONIZACIÓN: 400%...\n[ALERTA] PATTERN ORANGE DETECTADO.\n> No huyas.');
+    }
+  },
+  {
+    id: 'mgs',
+    comandos: ['metal gear', 'snake', 'codec'],
+    nombre: 'Alerta de Infiltración // Metal Gear Solid',
+    accion: () => {
+      imprimirEnTerminal('!\n[ALERTA] Has sido detectado.\n> Iniciando protocolo de infiltración...');
+      activarAlertaMGS();
+      sonarEfecto(880, 0.15, 0.08, 'square');
+    }
+  },
+  {
+    id: 'pokemon',
+    comandos: ['pokemon', 'pikachu'],
+    nombre: 'Encuentro Salvaje // Pokémon',
+    accion: () => {
+      imprimirEnTerminal('¡Un PIKACHU salvaje apareció!\n> ¿Qué debería hacer NAVI_OS?\n[ LUCHAR ]  [ CAPTURAR ]  [ HUIR ]');
+    }
+  }
+];
+
+function revisarComandoSecreto(comandoCompleto) {
+  for (const secreto of secretosWired) {
+    if (secreto.comandos.includes(comandoCompleto)) {
+      secreto.accion();
+      registrarSecreto(secreto.id, secreto.nombre);
+      return true;
+    }
+  }
+  return false;
+}
+
+function registrarSecreto(id, nombre) {
+  const encontrados = JSON.parse(localStorage.getItem('secretos_encontrados') || '[]');
+  if (!encontrados.includes(id)) {
+    encontrados.push(id);
+    localStorage.setItem('secretos_encontrados', JSON.stringify(encontrados));
+    setTimeout(() => imprimirEnTerminal(`[LOGRO DESBLOQUEADO] ${nombre}`), 300);
+  }
+  actualizarWidgetSecretos();
+}
+
+function actualizarWidgetSecretos() {
+  const contador = document.getElementById('secretos-contador');
+  const lista = document.getElementById('secretos-lista');
+  if (!contador || !lista) return;
+
+  const encontrados = JSON.parse(localStorage.getItem('secretos_encontrados') || '[]');
+  contador.textContent = `${encontrados.length} / ${secretosWired.length}`;
+
+  lista.innerHTML = '';
+  secretosWired.forEach(secreto => {
+    const item = document.createElement('li');
+    item.style.marginBottom = '3px';
+    if (encontrados.includes(secreto.id)) {
+      item.style.color = '#00ff66';
+      item.textContent = `✓ ${secreto.nombre}`;
+    } else {
+      item.style.color = '#555';
+      item.textContent = '??? // secreto sin descubrir';
+    }
+    lista.appendChild(item);
+  });
+}
+
+// Easter egg visual: congela la pantalla estilo "Za Warudo"
+function activarTiempoDetenido() {
+  document.body.classList.add('tiempo-detenido');
+  setTimeout(() => {
+    document.body.classList.remove('tiempo-detenido');
+    imprimirEnTerminal('> El tiempo vuelve a correr...');
+  }, 3000);
+}
+
+// Easter egg visual: flash rojo de alerta estilo Metal Gear Solid
+function activarAlertaMGS() {
+  const overlay = document.createElement('div');
+  overlay.className = 'alerta-mgs';
+  document.body.appendChild(overlay);
+  setTimeout(() => overlay.remove(), 1200);
+}
+
+/* ==========================================
+   5C. GALERÍA POR CATEGORÍAS (vista previa oculta)
+   ========================================== */
+function cambiarCategoriaGaleria(categoria, boton) {
+  document.querySelectorAll('.categoria-imgs').forEach(div => {
+    div.style.display = (div.dataset.categoria === categoria) ? 'flex' : 'none';
+  });
+  document.querySelectorAll('.tab-galeria').forEach(btn => btn.classList.remove('activo'));
+  if (boton) boton.classList.add('activo');
+}
+
+/* ==========================================
    5. PROCESADOR DE COMANDOS CLI (TERMINAL)
    ========================================== */
 function imprimirEnTerminal(texto, esComando = false) {
@@ -263,6 +393,9 @@ function ejecutarComandoCLI(cmdInput) {
   if (!inputLimpio) return;
 
   imprimirEnTerminal(inputLimpio, true);
+
+  // Revisa primero si es un comando secreto (no aparece en 'help')
+  if (revisarComandoSecreto(inputLimpio.toLowerCase())) return;
 
   const partes = inputLimpio.toLowerCase().split(' ');
   const comando = partes[0];
@@ -345,6 +478,75 @@ function ejecutarComandoCLI(cmdInput) {
       imprimirEnTerminal(`Comando no reconocido: "${comando}". Escribe 'help' para ver la lista de comandos.`);
       break;
   }
+}
+
+/* ==========================================
+   5B. ARCHIVO / TIMELINE + COMPARTIR EN LA WIRED
+   ========================================== */
+function inicializarArchivoYCompartir() {
+  const posts = document.querySelectorAll('#entradas .post');
+  const contenedorArchivo = document.getElementById('lista-archivo');
+  if (!contenedorArchivo) return;
+
+  if (posts.length === 0) {
+    contenedorArchivo.innerHTML = '<p style="color:#666; font-size:0.8rem;">No hay entradas registradas todavía.</p>';
+    return;
+  }
+
+  contenedorArchivo.innerHTML = '';
+
+  posts.forEach((post, index) => {
+    // Asignar un ID único al post si no tiene uno (para poder enlazarlo)
+    if (!post.id) post.id = `post-${index + 1}`;
+
+    const fechaEl = post.querySelector('.fecha');
+    const tituloEl = post.querySelector('h3');
+    const fechaTexto = fechaEl ? fechaEl.textContent.replace(/[\[\]]/g, '').trim() : 'FECHA DESCONOCIDA';
+    const tituloTexto = tituloEl ? tituloEl.textContent.trim() : 'Sin título';
+
+    // Línea en el timeline apuntando directo al post
+    const linea = document.createElement('div');
+    linea.className = 'linea-archivo';
+    linea.innerHTML = `<a href="#${post.id}">
+        <span class="archivo-fecha">${fechaTexto}</span>
+        <span class="archivo-titulo">${tituloTexto}</span>
+      </a>`;
+    contenedorArchivo.appendChild(linea);
+  });
+}
+
+function compartirPagina() {
+  const url = window.location.href;
+
+  // Si el navegador soporta compartir nativo (móviles sobre todo), lo usamos
+  if (navigator.share) {
+    navigator.share({
+      title: document.title,
+      text: 'Échale un vistazo a mi nodo en la Wired:',
+      url: url
+    }).catch(() => {});
+    return;
+  }
+
+  // Si no, copiamos el link al portapapeles
+  navigator.clipboard.writeText(url).then(() => {
+    mostrarAvisoCompartir('[ LINK DE LA PÁGINA COPIADO AL PORTAPAPELES ]');
+  }).catch(() => {
+    mostrarAvisoCompartir('[ NO SE PUDO COPIAR EL LINK ]');
+  });
+}
+
+function mostrarAvisoCompartir(mensaje) {
+  const aviso = document.createElement('div');
+  aviso.textContent = mensaje;
+  aviso.style.cssText = `
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+    background: #0d0d12; color: #00ff66; border: 1px solid #00ff66;
+    padding: 8px 16px; font-family: 'Courier New', monospace; font-size: 0.8rem;
+    z-index: 10000; box-shadow: 0 0 15px rgba(0,255,102,0.4);
+  `;
+  document.body.appendChild(aviso);
+  setTimeout(() => aviso.remove(), 2500);
 }
 
 /* ==========================================
@@ -463,6 +665,12 @@ alCargarDOM(() => {
   reproducirDialUp();
   iniciarEfectoTyping();
   inicializarBuscadorBitacora();
+
+  // 7.9 Archivo/Timeline y botones de compartir (se generan a partir de los posts)
+  inicializarArchivoYCompartir();
+
+  // 7.10 Widget de logros de comandos secretos (recuerda lo ya encontrado)
+  actualizarWidgetSecretos();
 });
 
 /* ==========================================
@@ -531,9 +739,10 @@ function cambiarTema(tema) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const imagenesGaleria = document.querySelectorAll('#galeria img');
+  const imagenesGaleria = document.querySelectorAll('#galeria img, .grid-posters img');
   imagenesGaleria.forEach(img => {
     img.addEventListener('click', () => {
+      const link = img.dataset.link; // solo los posters tienen data-link
       const modal = document.createElement('div');
       modal.id = 'img-modal';
       modal.style.cssText = `
@@ -545,14 +754,49 @@ document.addEventListener('DOMContentLoaded', () => {
       modal.innerHTML = `
         <div style="position: relative; text-align: center;">
           <img src="${img.src}" alt="Zoom" style="max-width: 85vw; max-height: 80vh; border: 2px solid #00f0ff; box-shadow: 0 0 25px rgba(0, 240, 255, 0.5); display: block; margin: 0 auto;">
-          <p style="color: #00ff66; font-family: 'Courier New', monospace; font-size: 0.8rem; margin-top: 10px; letter-spacing: 1px;">[ CLICK EN CUALQUIER LUGAR PARA CERRAR ]</p>
+          ${link ? `<a href="${link}" target="_blank" rel="noopener" class="btn-retro-mini" style="display:inline-block; margin-top:10px; text-decoration:none;">[ VISITAR SITIO ]</a>` : ''}
+          <p style="color: #00ff66; font-family: 'Courier New', monospace; font-size: 0.8rem; margin-top: 10px; letter-spacing: 1px;">[ CLICK FUERA DE LA IMAGEN PARA CERRAR ]</p>
         </div>
       `;
-      modal.onclick = () => modal.remove();
+      modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
       document.body.appendChild(modal);
     });
   });
 });
+
+/* ==========================================
+   11. ANILIST STATUS
+   ========================================== */
+async function cargarAniList() {
+  const widget = document.getElementById('anilist-widget');
+  if (!widget) return;
+  const query = `
+    query ($name: String) {
+      MediaListCollection(userName: $name, type: ANIME, status: CURRENT) {
+        lists { entries { media { title { romaji } coverImage { medium } } progress } }
+      }
+    }`;
+  try {
+    const res = await fetch('https://graphql.anilist.co', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, variables: { name: 'Tonyrv' } })
+    });
+    const data = await res.json();
+    const entry = data.data.MediaListCollection.lists[0]?.entries[0];
+    if (entry) {
+      widget.innerHTML = `
+        <img src="${entry.media.coverImage.medium}" style="width:60px; border:1px solid #00f0ff; margin-bottom:5px;">
+        <p style="color:#00ff66; margin:0;">${entry.media.title.romaji}</p>
+        <p style="color:#888; font-size:0.7rem; margin:0;">EP ${entry.progress}</p>`;
+    } else {
+      widget.textContent = 'Nada en emisión ahora mismo.';
+    }
+  } catch {
+    widget.textContent = 'No se pudo conectar a AniList.';
+  }
+}
+cargarAniList();
 
 // Fluctuación de CPU/RAM de UI
 setInterval(() => {
@@ -687,6 +931,27 @@ function hacerArrastrable(elemento, barraTitulo) {
 function cerrarVentana(idVentana) {
   const ventana = document.getElementById(idVentana);
   if (ventana) ventana.style.display = 'none';
+
+  // Si se cierra la ventana del rickroll, detenemos el video (quitamos el src)
+  if (idVentana === 'ventana-rickroll') {
+    const iframe = document.getElementById('rickroll-iframe');
+    if (iframe) iframe.src = '';
+  }
+}
+
+// Meme clásico, bien visible (no es un secreto): abre la ventana y reproduce el video
+function abrirRickroll() {
+  const ventana = document.getElementById('ventana-rickroll');
+  const iframe = document.getElementById('rickroll-iframe');
+  if (!ventana || !iframe) return;
+  iframe.src = 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1';
+  ventana.style.display = 'block';
+}
+
+// Easter egg: solo se llama cuando se escribe el comando secreto en la terminal
+function abrirVentanaSecreta() {
+  const ventana = document.getElementById('ventana-secreta');
+  if (ventana) ventana.style.display = 'block';
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -697,7 +962,9 @@ window.addEventListener('DOMContentLoaded', () => {
     ['ventana-status',   'ventana-status-header'],
     ['ventana-reloj',    'ventana-reloj-header'],
     ['ventana-lluvia',   'ventana-lluvia-header'],
-    ['ventana-clima',    'ventana-clima-header']
+    ['ventana-clima',    'ventana-clima-header'],
+    ['ventana-secreta',  'ventana-secreta-header'],
+    ['ventana-rickroll', 'ventana-rickroll-header']
   ];
 
   listaVentanas.forEach(([idVentana, idHeader]) => {
