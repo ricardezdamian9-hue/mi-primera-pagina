@@ -798,6 +798,49 @@ async function cargarAniList() {
 }
 cargarAniList();
 
+/* ==========================================
+   13. CUENTA REGRESIVA A PRÓXIMOS EVENTOS
+   ========================================== */
+// Agrega/edita aquí tus eventos. El mes va de 0 a 11 (0=enero, 9=octubre, 11=diciembre).
+// El año NO es necesario: la función calcula solo el próximo que ocurra (este año o el que sigue).
+const EVENTOS = [
+  { nombre: 'HALLOWEEN', mes: 9, dia: 31 },
+  { nombre: 'NAVIDAD', mes: 11, dia: 25 },
+  { nombre: 'AÑO NUEVO', mes: 0, dia: 1 },
+];
+
+function proximoEvento() {
+  const ahora = new Date();
+  let candidatos = EVENTOS.map(ev => {
+    let fecha = new Date(ahora.getFullYear(), ev.mes, ev.dia, 0, 0, 0);
+    if (fecha < ahora) fecha = new Date(ahora.getFullYear() + 1, ev.mes, ev.dia, 0, 0, 0);
+    return { nombre: ev.nombre, fecha };
+  });
+  candidatos.sort((a, b) => a.fecha - b.fecha);
+  return candidatos[0];
+}
+
+function actualizarContadorEventos() {
+  const widget = document.getElementById('evento-widget');
+  if (!widget) return;
+
+  const evento = proximoEvento();
+  const diff = evento.fecha - new Date();
+
+  const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const horas = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const mins = Math.floor((diff / (1000 * 60)) % 60);
+  const segs = Math.floor((diff / 1000) % 60);
+
+  widget.innerHTML = `
+    <p style="color:#ff0055; font-weight:bold; margin-bottom:4px;">${evento.nombre}</p>
+    <p style="color:#00ff66; font-size:1rem; font-weight:bold; margin:0;">${dias}d ${horas}h ${mins}m ${segs}s</p>
+  `;
+}
+
+actualizarContadorEventos();
+setInterval(actualizarContadorEventos, 1000);
+
 // Fluctuación de CPU/RAM de UI
 setInterval(() => {
   const cpu = Math.floor(Math.random() * 35) + 20; 
