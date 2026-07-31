@@ -116,6 +116,11 @@
               <label style="color: #00f0ff; font-size: 0.8rem; display: block; margin-bottom: 4px;">> MENSAJE:</label>
               <textarea id="guest-mensaje" maxlength="300" rows="3" placeholder="Escribe algo en la Wired..." style="width: 100%; box-sizing: border-box; background: #0d0d12; color: #00ff66; border: 1px solid #00f0ff; font-family: inherit; font-size: 0.85rem; padding: 6px; resize: vertical;"></textarea>
             </div>
+            <!-- CAMPO TRAMPA (HONEYPOT): invisible para una persona real, pero
+                 los bots que rellenan formularios automáticamente sí lo llenan.
+                 Si llega con algo escrito, se descarta el envío en silencio. -->
+            <input type="text" id="guest-web" name="web" autocomplete="off" tabindex="-1"
+              style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;">
             <button onclick="guardarEntradaGuest()" style="background: transparent; color: #00ff66; border: 1px solid #00ff66; padding: 5px 12px; font-size: 0.8rem; cursor: pointer;">[TRANSMITIR A LA RED]</button>
             <span id="guest-status" style="font-size: 0.75rem; margin-left: 8px; color: #ff0055;"></span>
           </div>
@@ -305,6 +310,27 @@
         return;
       }
 
+      // --- ANTI-SPAM 1: campo trampa (honeypot) ---
+      // Si el campo invisible "guest-web" trae algo escrito, es casi seguro
+      // un bot (una persona nunca lo ve ni lo llena). Se corta en silencio,
+      // sin dar pistas de por qué falló, para no ayudar a esquivarlo.
+      const honeypot = document.getElementById('guest-web');
+      if (honeypot && honeypot.value.trim() !== '') {
+        return;
+      }
+
+      // --- ANTI-SPAM 2: cooldown entre firmas ---
+      const ESPERA_MS = 30000; // 30 segundos
+      const ultimaFirma = parseInt(localStorage.getItem('guest_ultima_firma') || '0', 10);
+      const restante = ESPERA_MS - (Date.now() - ultimaFirma);
+      if (restante > 0) {
+        if (statusEl) {
+          statusEl.style.color = '#ff0055';
+          statusEl.textContent = `Espera ${Math.ceil(restante / 1000)}s antes de firmar de nuevo.`;
+        }
+        return;
+      }
+
       const nombreInput = document.getElementById('guest-nombre');
       const mensajeInput = document.getElementById('guest-mensaje');
 
@@ -320,7 +346,10 @@
 
       // Solo adjuntamos el dibujo si el lienzo no está vacío
       const enBlanco = esLienzoVacio();
-      const dibujoBase64 = enBlanco ? null : canvas.toDataURL('image/png');
+      // --- ANTI-SPAM 3: comprimir el dibujo antes de mandarlo ---
+      // Un PNG del canvas puede pesar mucho; usamos JPEG con calidad reducida
+      // para que cada firma ocupe poco espacio en la base de datos.
+      const dibujoBase64 = enBlanco ? null : canvas.toDataURL('image/jpeg', 0.6);
 
       const { error } = await supabaseClient.from('guestbook').insert([
         { nombre: nombre, mensaje: mensaje, dibujo: dibujoBase64 }
@@ -331,6 +360,8 @@
         if (statusEl) { statusEl.style.color = '#ff0055'; statusEl.textContent = 'Error al conectar con el nodo central.'; }
         return;
       }
+
+      localStorage.setItem('guest_ultima_firma', Date.now().toString());
 
       if (statusEl) { statusEl.style.color = '#00ff66'; statusEl.textContent = '¡Firma transmitida con éxito!'; }
       if (mensajeInput) mensajeInput.value = '';
@@ -433,31 +464,19 @@
       });
     }
 
-    // Suma 1 al campo indicado ('likes' o 'reportes') de una firma
+    // Suma 1 al campo indicado ('likes' o 'reportes') de una firma.
+    // Usa una función RPC segura (sumar_like / sumar_reporte) en vez de
+    // un UPDATE directo, para que un visitante solo pueda sumar +1 y
+    // nunca reescribir el nombre, mensaje o dibujo de otra persona.
     async function reaccionarEntradaGuest(id, campo, boton, esReporte = false) {
       if (!supabaseClient) return;
       boton.disabled = true;
 
-      const { data: fila, error: errorLectura } = await supabaseClient
-        .from('guestbook')
-        .select(campo)
-        .eq('id', id)
-        .single();
+      const nombreFuncion = esReporte ? 'sumar_reporte' : 'sumar_like';
+      const { error: errorRpc } = await supabaseClient.rpc(nombreFuncion, { fila_id: id });
 
-      if (errorLectura) {
-        console.error('Error al leer:', errorLectura);
-        boton.disabled = false;
-        return;
-      }
-
-      const nuevoValor = (fila[campo] || 0) + 1;
-      const { error: errorUpdate } = await supabaseClient
-        .from('guestbook')
-        .update({ [campo]: nuevoValor })
-        .eq('id', id);
-
-      if (errorUpdate) {
-        console.error('Error al actualizar:', errorUpdate);
+      if (errorRpc) {
+        console.error('Error al reaccionar:', errorRpc);
         boton.disabled = false;
         return;
       }
@@ -466,7 +485,7 @@
         boton.textContent = '🚩 Reportado';
       } else {
         const spanLikes = boton.querySelector('[data-likes]');
-        if (spanLikes) spanLikes.textContent = nuevoValor;
+        if (spanLikes) spanLikes.textContent = (parseInt(spanLikes.textContent, 10) || 0) + 1;
       }
 
       // Se guarda para que esta persona no pueda repetir la reacción en esta firma

@@ -112,6 +112,7 @@ body::before {
 
 .img-sidebar {
   width: 100%;
+  aspect-ratio: 1 / 1;
   border: 1px solid #00ff66;
   object-fit: cover;
 }
@@ -191,7 +192,7 @@ body::before {
 .post { background: #12121a; border: 1px solid #333; padding: 15px; margin-bottom: 15px; scroll-margin-top: 90px; }
 .post .fecha { color: #888; font-size: 0.8rem; }
 .post h3 { color: #00f0ff; margin: 5px 0; }
-.img-post { width: 100%; max-height: 250px; object-fit: cover; border: 1px solid #00ff66; margin-top: 10px; }
+.img-post { width: 100%; max-height: 250px; aspect-ratio: 5 / 2; object-fit: cover; border: 1px solid #00ff66; margin-top: 10px; }
 .btn-compartir { display: block; margin-top: 12px; }
 
 /* ARCHIVO / TIMELINE */
@@ -215,7 +216,7 @@ body::before {
 
 /* GALERÍA */
 .grid-galeria { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
-.grid-galeria img { border: 1px solid #00f0ff; width: calc(33.33% - 7px); object-fit: cover; }
+.grid-galeria img { border: 1px solid #00f0ff; width: calc(33.33% - 7px); aspect-ratio: 4 / 3; object-fit: cover; }
 
 /* PESTAÑAS DE LA GALERÍA CATEGORIZADA */
 .tabs-galeria { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
@@ -549,14 +550,6 @@ body.tiempo-detenido * {
 @keyframes parpadeoAlerta {
   0%, 100% { opacity: 0; }
   50% { opacity: 1; }
-}
-
-/* BOTÓN "SYSTEM_UPDATE" - parpadeo clásico de la vieja escuela (marquee/blink era) */
-.blink-rickroll {
-  animation: parpadeoBoton 1s steps(2, start) infinite;
-}
-@keyframes parpadeoBoton {
-  to { visibility: hidden; }
 }
 
 /* ==========================================

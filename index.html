@@ -12,14 +12,14 @@
   <meta property="og:title" content="Layer 01 // WIRED ACCESS">
   <meta property="og:description" content="Blog personal con estética retro cyber/Wired. No importa a dónde vayas, siempre hay una conexión.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://TUDOMINIO.com/yo1.jpeg">
+  <meta property="og:image" content="https://ricardezdamian9-hue.github.io/mi-primera-pagina/yo/yo1.jpeg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Layer 01 // WIRED ACCESS">
   <meta name="twitter:description" content="Blog personal con estética retro cyber/Wired.">
   <link rel="alternate" type="application/rss+xml" title="Bitácora RSS" href="feed.xml">
 
   <!-- SDK de Supabase (necesario para el contador de visitas y todo lo que usa la base de datos) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 </head>
 <body>
 
@@ -217,11 +217,10 @@
   <select id="select-playlist" onchange="cambiarPistaDesdeSelect()" style="background: #0d0d12; color: #00f0ff; border: 1px solid #00f0ff; font-family: inherit; font-size: 0.8rem; padding: 3px; width: 80%;">
     <option value="0">01. Duvet / Lain OST</option>
     <option value="1">02. Cyberpunk Ambient Track</option>
-    <option value="2">03. Días Azules - Ed Maverick</option>
   </select>
 
   <!-- Audio oculto controlado por el JS -->
-  <audio id="reproductor-main" src="Lain.mp3"></audio>
+  <audio id="reproductor-main" src="Lain.mp3" preload="none"></audio>
 </div>
 
         <hr class="linea-retro">
@@ -230,7 +229,7 @@
         <section id="sobre-mi" class="seccion">
           <h2>> 01. SOBRE MÍ</h2>
           <div class="contenido-flex">
-            <img src="yo.png" alt="Mi Avatar" class="img-perfil" onerror="this.src='https://via.placeholder.com/150/000000/00ff66?text=AVATAR'">
+            <img src="yo.png" alt="Mi Avatar" class="img-perfil" width="130" height="130" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27150%27 height=%27150%27 viewBox=%270 0 150 150%27%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27%23000000%27/%3E%3Crect x=%272%27 y=%272%27 width=%27146%27 height=%27146%27 fill=%27none%27 stroke=%27%2300ff66%27 stroke-width=%272%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 fill=%27%2300ff66%27 font-family=%27Courier New, monospace%27 font-size=%2718%27 text-anchor=%27middle%27 dominant-baseline=%27middle%27%3EAVATAR%3C/text%3E%3C/svg%3E'">
             <div class="texto">
               <p>¡Hola! Este es mi blog personal con estética retro cyber/Wired.</p>
               <p>Aquí escribiré sobre mis proyectos, ideas, videojuegos y desarrollo. No importa a dónde vayas, siempre hay una conexión.</p>
@@ -246,20 +245,20 @@
           <p id="buscador-vacio" style="display:none; color:#666; font-size:0.85rem;">No se encontraron entradas.</p>
           
           <article class="post">
-            <span class="fecha">[ FECHA: 2026.07.26 // LAYER_00 ]</span>
+            <span class="fecha">[ FECHA: 2026.07.26 // LAYER_01 ]</span>
             <h3>Mi primera entrada en la red</h3>
             <p>Hoy oficialmente inicio mi sitio web. Estar construyendo esto con código HTML y CSS me da control total sobre cómo quiero presentar mis notas sin depender de redes sociales tradicionales.</p>
-            <img src="imagenes/post1.jpg" alt="Imagen del post" class="img-post" loading="lazy" onerror="this.src='https://via.placeholder.com/500x200/000000/00f0ff?text=WIRED_NODE'">
+            
           </article>
 
           <article class="post">
-            <span class="fecha">[ FECHA: 2026.07.25 // LAYER_01 ]</span>
+            <span class="fecha">[ FECHA: 2026.07.25 // LAYER_02]</span>
             <h3>El diseño web de los años 2000</h3>
             <p>Las páginas de Geocities y los sitios inspirados en anime tenían personalidad propia: barras de sonido, contadores de visitas, marcos de ventanas y colores neón sobre fondos oscuros.</p>
           </article>
 
           <article class="post">
-            <span class="fecha">[ FECHA: 2026.07.28 // LAYER_02 ]</span>
+            <span class="fecha">[ FECHA: 2026.07.28 // LAYER_03 ]</span>
             <h3>pensando</h3>
             <p>Que más podria poner.</p>
           </article>
@@ -278,21 +277,8 @@
         <section id="galeria" class="seccion">
           <h2>> 04. GALERÍA DE IMÁGENES</h2>
           <p>Capturas, arte y referencias visuales:</p>
-          <div class="grid-galeria">
-            <img src="yo1.jpeg" alt="Galeria 1" loading="lazy">
-            <img src="nube.jpeg" alt="Galeria 2" loading="lazy">
-            <img src="nube1.jpeg" alt="Galeria 3" loading="lazy">
-            <img src="yo2.jpeg" alt="Galeria 4" loading="lazy">
-          </div>
 
-          <!-- ==========================================================
-               VISTA PREVIA: GALERÍA POR CATEGORÍAS
-               OCULTA POR AHORA. Para activarla, quita style="display:none;"
-               del div#galeria-categorizada de abajo (o pídeselo a Claude).
-               ========================================================== -->
-          <div id="galeria-categorizada" style="display:none; margin-top: 25px; border-top: 1px dashed #333; padding-top: 20px;">
-            <p style="color: #ff0055; font-size: 0.75rem; margin-bottom: 10px;">[ VISTA PREVIA // EN PRUEBA ]</p>
-
+          <div id="galeria-categorizada">
             <div class="tabs-galeria">
               <button class="tab-galeria activo" onclick="cambiarCategoriaGaleria('nube', this)">[ NUBE ]</button>
               <button class="tab-galeria" onclick="cambiarCategoriaGaleria('paisajes', this)">[ PAISAJES ]</button>
@@ -301,24 +287,23 @@
             </div>
 
             <div class="grid-galeria categoria-imgs" data-categoria="nube">
-              <img src="nube.jpeg" alt="Nube 1" loading="lazy">
-              <img src="nube1.jpeg" alt="Nube 2" loading="lazy">
+              <img src="nubes/nube.jpeg" alt="Nube 1" loading="lazy">
+              <img src="nubes/nube1.jpeg" alt="Nube 2" loading="lazy">
             </div>
 
             <div class="grid-galeria categoria-imgs" data-categoria="paisajes" style="display:none;">
-              <img src="paisajes/paisaje1.jpg" alt="Paisaje 1" loading="lazy" onerror="this.src='https://via.placeholder.com/400x250/000000/00f0ff?text=PAISAJE'">
-              <img src="paisajes/paisaje2.jpg" alt="Paisaje 2" loading="lazy" onerror="this.src='https://via.placeholder.com/400x250/000000/00f0ff?text=PAISAJE'">
+              <img src="paisajes/paisaje1.jpg" alt="Paisaje 1" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27400%27 height=%27250%27 viewBox=%270 0 400 250%27%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27%23000000%27/%3E%3Crect x=%272%27 y=%272%27 width=%27396%27 height=%27246%27 fill=%27none%27 stroke=%27%2300f0ff%27 stroke-width=%272%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 fill=%27%2300f0ff%27 font-family=%27Courier New, monospace%27 font-size=%2731%27 text-anchor=%27middle%27 dominant-baseline=%27middle%27%3EPAISAJE%3C/text%3E%3C/svg%3E'">
+              <img src="paisajes/paisaje2.jpg" alt="Paisaje 2" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27400%27 height=%27250%27 viewBox=%270 0 400 250%27%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27%23000000%27/%3E%3Crect x=%272%27 y=%272%27 width=%27396%27 height=%27246%27 fill=%27none%27 stroke=%27%2300f0ff%27 stroke-width=%272%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 fill=%27%2300f0ff%27 font-family=%27Courier New, monospace%27 font-size=%2731%27 text-anchor=%27middle%27 dominant-baseline=%27middle%27%3EPAISAJE%3C/text%3E%3C/svg%3E'">
             </div>
 
             <div class="grid-galeria categoria-imgs" data-categoria="yo" style="display:none;">
-              <img src="yo.png" alt="Yo 1" loading="lazy">
-              <img src="yo1.jpeg" alt="Yo 2" loading="lazy">
-              <img src="yo2.jpeg" alt="Yo 3" loading="lazy">
+              <img src="yo/yo1.jpeg" alt="Yo 1" loading="lazy">
+              <img src="yo/yo2.jpeg" alt="Yo 2" loading="lazy">
             </div>
 
             <div class="grid-galeria categoria-imgs" data-categoria="arte" style="display:none;">
-              <img src="arte/proyecto1.jpg" alt="Arte / Proyecto 1" loading="lazy" onerror="this.src='https://via.placeholder.com/400x250/000000/00f0ff?text=ARTE+%2F+PROYECTO'">
-              <img src="arte/proyecto2.jpg" alt="Arte / Proyecto 2" loading="lazy" onerror="this.src='https://via.placeholder.com/400x250/000000/00f0ff?text=ARTE+%2F+PROYECTO'">
+              <img src="arte/proyecto1.jpg" alt="Arte / Proyecto 1" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27400%27 height=%27250%27 viewBox=%270 0 400 250%27%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27%23000000%27/%3E%3Crect x=%272%27 y=%272%27 width=%27396%27 height=%27246%27 fill=%27none%27 stroke=%27%2300f0ff%27 stroke-width=%272%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 fill=%27%2300f0ff%27 font-family=%27Courier New, monospace%27 font-size=%2731%27 text-anchor=%27middle%27 dominant-baseline=%27middle%27%3EARTE / PROYECTO%3C/text%3E%3C/svg%3E'">
+              <img src="arte/proyecto2.jpg" alt="Arte / Proyecto 2" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27400%27 height=%27250%27 viewBox=%270 0 400 250%27%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27%23000000%27/%3E%3Crect x=%272%27 y=%272%27 width=%27396%27 height=%27246%27 fill=%27none%27 stroke=%27%2300f0ff%27 stroke-width=%272%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 fill=%27%2300f0ff%27 font-family=%27Courier New, monospace%27 font-size=%2731%27 text-anchor=%27middle%27 dominant-baseline=%27middle%27%3EARTE / PROYECTO%3C/text%3E%3C/svg%3E'">
             </div>
           </div>
         </section>
@@ -343,6 +328,11 @@
           <div class="contador">Visitas: [ 0 0 0 4 2 1 ]</div>
         </footer>
 
+        <!-- AVISO DE PRIVACIDAD (letra chica) -->
+        <p style="color:#555; font-size:0.65rem; text-align:center; margin-top:10px; line-height:1.4;">
+          Este nodo registra un contador de visitas anónimo y, de forma automática, el país/ciudad aproximado y la página de origen de cada visita (sin nombres ni datos personales), solo con fines estadísticos internos.
+        </p>
+
       </div>
     </main>
 
@@ -355,7 +345,7 @@
       <!-- GIF O IMAGEN DE CABLES / LAIN -->
       <div class="widget-box">
         <div class="widget-title">> WIRED_NODE</div>
-        <img src="imagenes/cables-lain.gif" alt="Wired Node" class="img-sidebar" onerror="this.src='https://media.tenor.com/yoYEgCaeUdgAAAAM/computer-anime.gif'">
+        <img src="imagenes/cables-lain.gif" alt="Wired Node" class="img-sidebar" loading="lazy" onerror="this.src='https://media.tenor.com/yoYEgCaeUdgAAAAM/computer-anime.gif'">
       </div>
 
       <!-- ESTADO DEL SISTEMA CON LEDS -->
@@ -373,17 +363,17 @@
     <div class="widget-title">> BUTTONS</div>
     
     <div class="banners-container">
-      <img src="https://cyber.dabamos.de/88x31/blink-0.gif" alt="Botón 1">
-      <img src="https://cyber.dabamos.de/88x31/c88_01.gif" alt="Botón 2">
-      <img src="https://cyber.dabamos.de/88x31/bluepantsu.gif" alt="Botón 3">
-      <img src="https://cyber.dabamos.de/88x31/evangelion.gif" alt="Botón 4">
-      <img src="https://cyber.dabamos.de/88x31/jacob.gif" alt="Botón 5">
-      <img src="https://cyber.dabamos.de/88x31/ostan.gif" alt="Botón 6">
-      <img src="https://blob.gifcities.org/gifcities/BHLULI7XFF57MPE7JJ7BD5Q35VZMV4BL.gif" alt="Botón 7">
-      <img src="https://blob.gifcities.org/gifcities/6RT6GOJDC745W2HSAU7JJGCKW5MC36S7.gif" alt="Botón 8">
-      <img src="https://blob.gifcities.org/gifcities/FVA5IR5BVS55IVETMGLS34IHVS6AFOCO.gif" alt="Botón 9">
-      <img src="https://blob.gifcities.org/gifcities/SANOJ5SC3ALJDWLBSJSCTODB76JRWZP6.gif" alt="Botón 10">
-      <img src="https://blob.gifcities.org/gifcities/YLU56EYI56L4UF54B2BP737NSWKCFUNP.gif" alt="Botón 11">
+      <img src="https://cyber.dabamos.de/88x31/blink-0.gif" alt="Botón 1" loading="lazy">
+      <img src="https://cyber.dabamos.de/88x31/c88_01.gif" alt="Botón 2" loading="lazy">
+      <img src="https://cyber.dabamos.de/88x31/bluepantsu.gif" alt="Botón 3" loading="lazy">
+      <img src="https://cyber.dabamos.de/88x31/evangelion.gif" alt="Botón 4" loading="lazy">
+      <img src="https://cyber.dabamos.de/88x31/jacob.gif" alt="Botón 5" loading="lazy">
+      <img src="https://cyber.dabamos.de/88x31/ostan.gif" alt="Botón 6" loading="lazy">
+      <img src="https://blob.gifcities.org/gifcities/BHLULI7XFF57MPE7JJ7BD5Q35VZMV4BL.gif" alt="Botón 7" loading="lazy">
+      <img src="https://blob.gifcities.org/gifcities/6RT6GOJDC745W2HSAU7JJGCKW5MC36S7.gif" alt="Botón 8" loading="lazy">
+      <img src="https://blob.gifcities.org/gifcities/FVA5IR5BVS55IVETMGLS34IHVS6AFOCO.gif" alt="Botón 9" loading="lazy">
+      <img src="https://blob.gifcities.org/gifcities/SANOJ5SC3ALJDWLBSJSCTODB76JRWZP6.gif" alt="Botón 10" loading="lazy">
+      <img src="https://blob.gifcities.org/gifcities/YLU56EYI56L4UF54B2BP737NSWKCFUNP.gif" alt="Botón 11" loading="lazy">
     </div>
   </div>
 
@@ -391,21 +381,14 @@
   <div class="widget-box">
     <div class="widget-title">> ANIME_LIST</div>
     <div class="grid-posters">
-      <img src="posters/anime1.jpg" alt="Serial Experiments Lain" data-link="#" loading="lazy" onerror="this.src='https://via.placeholder.com/200x300/000000/00f0ff?text=POSTER+1'">
-      <img src="posters/anime2.jpg" alt="Neon Genesis Evangelion" data-link="#" loading="lazy" onerror="this.src='https://via.placeholder.com/200x300/000000/00f0ff?text=POSTER+2'">
-      <img src="posters/anime3.jpg" alt="Akira" data-link="#" loading="lazy" onerror="this.src='https://via.placeholder.com/200x300/000000/00f0ff?text=POSTER+3'">
-      <img src="posters/anime4.jpg" alt="Cowboy Bebop" data-link="#" loading="lazy" onerror="this.src='https://via.placeholder.com/200x300/000000/00f0ff?text=POSTER+4'">
-      <img src="posters/anime5.jpg" alt="JoJo's Bizarre Adventure" data-link="#" loading="lazy" onerror="this.src='https://via.placeholder.com/200x300/000000/00f0ff?text=POSTER+5'">
-      <img src="posters/anime6.jpg" alt="One Piece" data-link="#" loading="lazy" onerror="this.src='https://via.placeholder.com/200x300/000000/00f0ff?text=POSTER+6'">
+      <img src="posters/anime1.jpg" alt="Serial Experiments Lain" data-link="#" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27200%27 height=%27300%27 viewBox=%270 0 200 300%27%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27%23000000%27/%3E%3Crect x=%272%27 y=%272%27 width=%27196%27 height=%27296%27 fill=%27none%27 stroke=%27%2300f0ff%27 stroke-width=%272%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 fill=%27%2300f0ff%27 font-family=%27Courier New, monospace%27 font-size=%2725%27 text-anchor=%27middle%27 dominant-baseline=%27middle%27%3EPOSTER 1%3C/text%3E%3C/svg%3E'">
+      <img src="posters/anime2.jpg" alt="Neon Genesis Evangelion" data-link="#" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27200%27 height=%27300%27 viewBox=%270 0 200 300%27%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27%23000000%27/%3E%3Crect x=%272%27 y=%272%27 width=%27196%27 height=%27296%27 fill=%27none%27 stroke=%27%2300f0ff%27 stroke-width=%272%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 fill=%27%2300f0ff%27 font-family=%27Courier New, monospace%27 font-size=%2725%27 text-anchor=%27middle%27 dominant-baseline=%27middle%27%3EPOSTER 2%3C/text%3E%3C/svg%3E'">
+      <img src="posters/anime3.jpg" alt="Akira" data-link="#" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27200%27 height=%27300%27 viewBox=%270 0 200 300%27%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27%23000000%27/%3E%3Crect x=%272%27 y=%272%27 width=%27196%27 height=%27296%27 fill=%27none%27 stroke=%27%2300f0ff%27 stroke-width=%272%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 fill=%27%2300f0ff%27 font-family=%27Courier New, monospace%27 font-size=%2725%27 text-anchor=%27middle%27 dominant-baseline=%27middle%27%3EPOSTER 3%3C/text%3E%3C/svg%3E'">
+      <img src="posters/anime4.jpg" alt="Cowboy Bebop" data-link="#" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27200%27 height=%27300%27 viewBox=%270 0 200 300%27%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27%23000000%27/%3E%3Crect x=%272%27 y=%272%27 width=%27196%27 height=%27296%27 fill=%27none%27 stroke=%27%2300f0ff%27 stroke-width=%272%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 fill=%27%2300f0ff%27 font-family=%27Courier New, monospace%27 font-size=%2725%27 text-anchor=%27middle%27 dominant-baseline=%27middle%27%3EPOSTER 4%3C/text%3E%3C/svg%3E'">
+      <img src="posters/anime5.jpg" alt="JoJo's Bizarre Adventure" data-link="#" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27200%27 height=%27300%27 viewBox=%270 0 200 300%27%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27%23000000%27/%3E%3Crect x=%272%27 y=%272%27 width=%27196%27 height=%27296%27 fill=%27none%27 stroke=%27%2300f0ff%27 stroke-width=%272%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 fill=%27%2300f0ff%27 font-family=%27Courier New, monospace%27 font-size=%2725%27 text-anchor=%27middle%27 dominant-baseline=%27middle%27%3EPOSTER 5%3C/text%3E%3C/svg%3E'">
+      <img src="posters/anime6.jpg" alt="One Piece" data-link="#" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27200%27 height=%27300%27 viewBox=%270 0 200 300%27%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27%23000000%27/%3E%3Crect x=%272%27 y=%272%27 width=%27196%27 height=%27296%27 fill=%27none%27 stroke=%27%2300f0ff%27 stroke-width=%272%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 fill=%27%2300f0ff%27 font-family=%27Courier New, monospace%27 font-size=%2725%27 text-anchor=%27middle%27 dominant-baseline=%27middle%27%3EPOSTER 6%3C/text%3E%3C/svg%3E'">
     </div>
     <p style="color: #555; font-size: 0.65rem; margin-top: 6px; margin-bottom: 0;">Click en un poster para verlo en grande.</p>
-  </div>
-
-  <!-- WIDGET: "ACTUALIZACIÓN DEL SISTEMA" (meme clásico, visible a propósito, no es un secreto) -->
-  <div class="widget-box">
-    <div class="widget-title">> SYSTEM_UPDATE</div>
-    <p style="color: #aaaaaa; font-size: 0.7rem; margin-bottom: 8px;">Hay una actualización crítica disponible para NAVI_OS.</p>
-    <button onclick="abrirRickroll()" class="btn-retro-mini blink-rickroll" style="width: 100%; padding: 8px; font-size: 0.8rem;">[ ▶ CLICK AQUÍ PARA ACTUALIZAR ]</button>
   </div>
 
   <!-- WIDGET: WEBRING -->
@@ -528,19 +511,6 @@
   </div>
 </div>
 
-<!-- VENTANA FLOTANTE: MINIJUEGO SNAKE -->
-<div id="ventana-snake" class="ventana-flotante" style="top: 150px; left: 100px; width: 220px;">
-  <div id="ventana-snake-header" class="ventana-header">
-    <span class="ventana-titulo">CYBER_SNAKE.EXE</span>
-    <button class="btn-cerrar-ventana" onclick="cerrarVentana('ventana-snake')">[X]</button>
-  </div>
-  <div class="ventana-body" style="text-align: center;">
-    <canvas id="snake-canvas" width="200" height="200" style="background: #030305; border: 1px solid #00f0ff;"></canvas>
-    <div style="font-size: 0.7rem; color: #00ff66; margin-top: 4px;">SCORE: <span id="snake-score">0</span></div>
-    <button onclick="iniciarSnake()" class="btn-retro-mini" style="margin-top: 4px;">[START / RESET]</button>
-  </div>
-</div>
-
   <!-- VENTANA FLOTANTE OCULTA: EASTER EGG (solo se abre escribiendo un comando secreto en la terminal) -->
   <div id="ventana-secreta" class="ventana-flotante" style="display: none; top: 160px; left: 140px; width: 260px;">
     <div id="ventana-secreta-header" class="ventana-header">
@@ -551,19 +521,6 @@
       <p style="color: #ff0055; font-size: 0.75rem; margin-bottom: 6px;">[ TRANSMISIÓN NO AUTORIZADA ]</p>
       <p style="color: #00ff66; font-size: 0.8rem; margin-bottom: 8px;">Encontraste una capa oculta de la Wired. No todos los nodos son visibles a simple vista.</p>
       <p style="color: #00f0ff; font-size: 0.8rem; font-style: italic; margin: 0;">"Close the world, open the nExt."</p>
-    </div>
-  </div>
-
-  <!-- VENTANA FLOTANTE: "ACTUALIZACIÓN DEL SISTEMA" (rickroll clásico, bien visible, no es secreto) -->
-  <div id="ventana-rickroll" class="ventana-flotante" style="display: none; top: 140px; left: 160px; width: 300px;">
-    <div id="ventana-rickroll-header" class="ventana-header">
-      <span class="ventana-titulo">SYSTEM_UPDATE.EXE</span>
-      <button class="btn-cerrar-ventana" onclick="cerrarVentana('ventana-rickroll')">[X]</button>
-    </div>
-    <div class="ventana-body" style="padding: 0;">
-      <div style="position: relative; padding-bottom: 56.25%; height: 0;">
-        <iframe id="rickroll-iframe" src="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allow="autoplay"></iframe>
-      </div>
     </div>
   </div>
 

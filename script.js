@@ -83,8 +83,10 @@ function cerrarVentanaFrases() {
    ========================================== */
 const listaCanciones = [
   { titulo: "01. Duvet / Lain OST", url: "Lain.mp3" },
-  { titulo: "02. Cyberpunk Ambient Track", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
-  { titulo: "03. Días Azules - Ed Maverick", url: "https://www.youtube.com/watch?v=atfpEXIzV40&list=RDatfpEXIzV40&start_radio=1" }
+  { titulo: "02. Cyberpunk Ambient Track", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" }
+  // Para agregar más pistas, usa un link DIRECTO a un archivo de audio
+  // (termina en .mp3/.ogg/.wav), nunca un link de youtube.com — el
+  // reproductor no puede leer eso. Ver explicación completa en el chat.
 ];
 
 let indiceActual = 0;
@@ -93,12 +95,12 @@ function cargarPista(index) {
   const audioPlayer = document.getElementById('reproductor-main');
   const tituloPista = document.getElementById('titulo-pista');
   const selectPlaylist = document.getElementById('select-playlist');
-  
   if (!audioPlayer) return;
 
   indiceActual = index;
-  audioPlayer.src = listaCanciones[index].url;
-  if (tituloPista) tituloPista.textContent = listaCanciones[index].titulo;
+  const pista = listaCanciones[index];
+  audioPlayer.src = pista.url;
+  if (tituloPista) tituloPista.textContent = pista.titulo;
   if (selectPlaylist) selectPlaylist.value = index;
 }
 
@@ -974,21 +976,6 @@ function hacerArrastrable(elemento, barraTitulo) {
 function cerrarVentana(idVentana) {
   const ventana = document.getElementById(idVentana);
   if (ventana) ventana.style.display = 'none';
-
-  // Si se cierra la ventana del rickroll, detenemos el video (quitamos el src)
-  if (idVentana === 'ventana-rickroll') {
-    const iframe = document.getElementById('rickroll-iframe');
-    if (iframe) iframe.src = '';
-  }
-}
-
-// Meme clásico, bien visible (no es un secreto): abre la ventana y reproduce el video
-function abrirRickroll() {
-  const ventana = document.getElementById('ventana-rickroll');
-  const iframe = document.getElementById('rickroll-iframe');
-  if (!ventana || !iframe) return;
-  iframe.src = 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1';
-  ventana.style.display = 'block';
 }
 
 // Easter egg: solo se llama cuando se escribe el comando secreto en la terminal
@@ -1001,13 +988,11 @@ window.addEventListener('DOMContentLoaded', () => {
   const listaVentanas = [
     ['ventana-contador', 'ventana-contador-header'],
     ['ventana-notas',    'ventana-notas-header'],
-    ['ventana-snake',    'ventana-snake-header'],
     ['ventana-status',   'ventana-status-header'],
     ['ventana-reloj',    'ventana-reloj-header'],
     ['ventana-lluvia',   'ventana-lluvia-header'],
     ['ventana-clima',    'ventana-clima-header'],
-    ['ventana-secreta',  'ventana-secreta-header'],
-    ['ventana-rickroll', 'ventana-rickroll-header']
+    ['ventana-secreta',  'ventana-secreta-header']
   ];
 
   listaVentanas.forEach(([idVentana, idHeader]) => {
@@ -1018,7 +1003,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ==========================================
-   12. NOTAS (MEMO) Y SNAKE
+   12. NOTAS (MEMO)
    ========================================== */
 window.addEventListener('DOMContentLoaded', () => {
   const memo = document.getElementById('texto-memo');
@@ -1029,57 +1014,6 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
-
-let snakeInterval = null;
-function iniciarSnake() {
-  const canvas = document.getElementById('snake-canvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const grid = 10;
-  let score = 0;
-  let snake = [{x: 100, y: 100}];
-  let dx = grid, dy = 0;
-  let food = {x: 50, y: 50};
-
-  if (snakeInterval) clearInterval(snakeInterval);
-
-  document.onkeydown = (e) => {
-    if (e.key === 'ArrowUp' && dy === 0) { dx = 0; dy = -grid; }
-    if (e.key === 'ArrowDown' && dy === 0) { dx = 0; dy = grid; }
-    if (e.key === 'ArrowLeft' && dx === 0) { dx = -grid; dy = 0; }
-    if (e.key === 'ArrowRight' && dx === 0) { dx = grid; dy = 0; }
-  };
-
-  snakeInterval = setInterval(() => {
-    const head = {x: snake[0].x + dx, y: snake[0].y + dy};
-    
-    if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
-      clearInterval(snakeInterval);
-      alert('GAME OVER - Score: ' + score);
-      return;
-    }
-
-    snake.unshift(head);
-
-    if (head.x === food.x && head.y === food.y) {
-      score += 10;
-      document.getElementById('snake-score').textContent = score;
-      food = {
-        x: Math.floor(Math.random() * (canvas.width / grid)) * grid,
-        y: Math.floor(Math.random() * (canvas.height / grid)) * grid
-      };
-    } else {
-      snake.pop();
-    }
-
-    ctx.fillStyle = '#030305';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#ff0055'; 
-    ctx.fillRect(food.x, food.y, grid - 1, grid - 1);
-    ctx.fillStyle = '#00ff66'; 
-    snake.forEach(part => ctx.fillRect(part.x, part.y, grid - 1, grid - 1));
-  }, 100);
-}
 
 /* ==========================================
    SISTEMA DE LIBRO DE VISITAS GLOBAL (SUPABASE)
@@ -1145,24 +1079,12 @@ async function actualizarContadorVisitas() {
       return;
     }
 
-    // 1. Leer el valor actual
-    const { data: actual, error: errorLectura } = await supabaseClient
-      .from('site_counter')
-      .select('visits')
-      .eq('id', 1)
-      .single();
+    // Sumar 1 directamente en la base de datos con una función RPC segura
+    // (evita que dos visitas simultáneas se pisen y evita dejar un UPDATE
+    // abierto que cualquiera pudiera usar para poner el contador en 0).
+    const { data: nuevoValor, error: errorRpc } = await supabaseClient.rpc('sumar_visita');
 
-    if (errorLectura) throw errorLectura;
-
-    const nuevoValor = (actual?.visits || 0) + 1;
-
-    // 2. Sumar 1 y guardar
-    const { error: errorUpdate } = await supabaseClient
-      .from('site_counter')
-      .update({ visits: nuevoValor })
-      .eq('id', 1);
-
-    if (errorUpdate) throw errorUpdate;
+    if (errorRpc) throw errorRpc;
 
     // Marcar esta sesión como ya contada (se resetea al cerrar el navegador/pestaña)
     sessionStorage.setItem('visita_contada', 'true');
