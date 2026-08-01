@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Layer 01 // WIRED ACCESS</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#050508">
   <link rel="stylesheet" href="style.css">
 
   <!-- SEO / Redes sociales -->
@@ -12,10 +15,12 @@
   <meta property="og:title" content="Layer 01 // WIRED ACCESS">
   <meta property="og:description" content="Blog personal con estética retro cyber/Wired. No importa a dónde vayas, siempre hay una conexión.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="MIPAGINA.COM">
+  <meta property="og:url" content="https://ricardezdamian9-hue.github.io/mi-primera-pagina/">
+  <meta property="og:image" content="https://ricardezdamian9-hue.github.io/mi-primera-pagina/yo.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Layer 01 // WIRED ACCESS">
   <meta name="twitter:description" content="Blog personal con estética retro cyber/Wired.">
+  <meta name="twitter:image" content="https://ricardezdamian9-hue.github.io/mi-primera-pagina/yo.png">
   <link rel="alternate" type="application/rss+xml" title="Bitácora RSS" href="feed.xml">
 
   <!-- SDK de Supabase (necesario para el contador de visitas y todo lo que usa la base de datos) -->
@@ -89,6 +94,7 @@
   <div style="display: flex; flex-direction: column; gap: 6px; padding: 5px 0;">
     <button onclick="alternarModoLectura()" class="btn-retro-mini">[ MODO LECTURA ]</button>
     <button onclick="alternarScanlines()" class="btn-retro-mini">[ SCANLINES ON/OFF ]</button>
+    <button id="btn-glitch-toggle" onclick="alternarModoGlitch()" class="btn-retro-mini">[ GLITCH: ON ]</button>
   </div>
 </div>
 
@@ -244,23 +250,49 @@
           <input type="text" id="buscador-bitacora" class="buscador-bitacora" placeholder="> Buscar en la bitácora...">
           <p id="buscador-vacio" style="display:none; color:#666; font-size:0.85rem;">No se encontraron entradas.</p>
           
-          <article class="post">
+          <article class="post" id="post-1">
             <span class="fecha">[ FECHA: 2026.07.26 // LAYER_01 ]</span>
             <h3>Mi primera entrada en la red</h3>
             <p>Hoy oficialmente inicio mi sitio web. Estar construyendo esto con código HTML y CSS me da control total sobre cómo quiero presentar mis notas sin depender de redes sociales tradicionales.</p>
-            
+            <button class="btn-retro-mini btn-toggle-comentarios" onclick="alternarComentarios('post-1', this)">[ VER COMENTARIOS <span class="contador-comentarios" data-post-id="post-1">(0)</span> ]</button>
+            <div class="comentarios-post" id="comentarios-post-1" data-post-id="post-1" style="display:none;">
+              <div class="comentarios-lista" id="comentarios-lista-post-1"><p style="color:#666; font-size:0.75rem;">Cargando comentarios...</p></div>
+              <div class="comentarios-form">
+                <input type="text" class="comentario-nombre" placeholder="Tu nombre (opcional)">
+                <textarea class="comentario-mensaje" placeholder="Escribe un comentario..." rows="2"></textarea>
+                <button class="btn-retro-mini" onclick="enviarComentario('post-1', this)">[ ENVIAR ]</button>
+              </div>
+            </div>
           </article>
 
-          <article class="post">
+          <article class="post" id="post-2">
             <span class="fecha">[ FECHA: 2026.07.25 // LAYER_02]</span>
             <h3>El diseño web de los años 2000</h3>
             <p>Las páginas de Geocities y los sitios inspirados en anime tenían personalidad propia: barras de sonido, contadores de visitas, marcos de ventanas y colores neón sobre fondos oscuros.</p>
+            <button class="btn-retro-mini btn-toggle-comentarios" onclick="alternarComentarios('post-2', this)">[ VER COMENTARIOS <span class="contador-comentarios" data-post-id="post-2">(0)</span> ]</button>
+            <div class="comentarios-post" id="comentarios-post-2" data-post-id="post-2" style="display:none;">
+              <div class="comentarios-lista" id="comentarios-lista-post-2"><p style="color:#666; font-size:0.75rem;">Cargando comentarios...</p></div>
+              <div class="comentarios-form">
+                <input type="text" class="comentario-nombre" placeholder="Tu nombre (opcional)">
+                <textarea class="comentario-mensaje" placeholder="Escribe un comentario..." rows="2"></textarea>
+                <button class="btn-retro-mini" onclick="enviarComentario('post-2', this)">[ ENVIAR ]</button>
+              </div>
+            </div>
           </article>
 
-          <article class="post">
+          <article class="post" id="post-3">
             <span class="fecha">[ FECHA: 2026.07.28 // LAYER_03git add . ]</span>
             <h3>pensando</h3>
             <p>Que más podria poner.</p>
+            <button class="btn-retro-mini btn-toggle-comentarios" onclick="alternarComentarios('post-3', this)">[ VER COMENTARIOS <span class="contador-comentarios" data-post-id="post-3">(0)</span> ]</button>
+            <div class="comentarios-post" id="comentarios-post-3" data-post-id="post-3" style="display:none;">
+              <div class="comentarios-lista" id="comentarios-lista-post-3"><p style="color:#666; font-size:0.75rem;">Cargando comentarios...</p></div>
+              <div class="comentarios-form">
+                <input type="text" class="comentario-nombre" placeholder="Tu nombre (opcional)">
+                <textarea class="comentario-mensaje" placeholder="Escribe un comentario..." rows="2"></textarea>
+                <button class="btn-retro-mini" onclick="enviarComentario('post-3', this)">[ ENVIAR ]</button>
+              </div>
+            </div>
           </article>
         </section>
 
@@ -358,6 +390,14 @@
         </div>
       </div>
 
+      <!-- WIDGET DECORATIVO: ESTADO DE LA RED (PING FALSO, PURAMENTE VISUAL) -->
+      <div class="widget-box">
+        <div class="widget-title">> NODE_PING</div>
+        <div id="ping-terminal" class="ping-terminal">
+          <p>[ WAIT ] contactando wired.node...</p>
+        </div>
+      </div>
+
 <!-- WIDGET DE BOTONES -->
   <div class="widget-box">
     <div class="widget-title">> BUTTONS</div>
@@ -408,7 +448,7 @@
 <div class="widget-box">
   <div class="widget-title">> DISCORD_STATUS</div>
   <div id="discord-widget" style="padding: 5px; font-size: 0.8rem; text-align: center;">
-    <img id="discord-avatar" src="https://i.imgur.com/83p1Xb1.png" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid #00f0ff; margin-bottom: 5px;" alt="Avatar">
+    <img id="discord-avatar" src="https://i.imgur.com/83p1Xb1.png" loading="lazy" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid #00f0ff; margin-bottom: 5px;" alt="Avatar">
     <div id="discord-user" style="color: #00f0ff; font-weight: bold;">Cargando...</div>
     <div id="discord-status" style="color: #00ff66; font-size: 0.75rem;">Conectando a red...</div>
     <div id="discord-activity" style="color: #aaaaaa; font-size: 0.7rem; margin-top: 4px;">—</div>

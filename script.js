@@ -517,6 +517,141 @@ function inicializarArchivoYCompartir() {
   });
 }
 
+/* ==========================================
+   5C. JSON-LD (SCHEMA.ORG) GENERADO DESDE LOS POSTS
+   ------------------------------------------------
+   Lee cada .post (fecha, título, id) y arma un bloque
+   application/ld+json tipo "Blog" con sus "BlogPosting".
+   Se regenera solo, así que no hay que tocar nada a mano
+   cuando agregás una entrada nueva: solo asegurate de que
+   el nuevo <article class="post"> tenga un id único
+   (post-4, post-5, ...) como los que ya existen.
+   ========================================== */
+function generarJSONLD() {
+  const posts = document.querySelectorAll('#entradas .post');
+  if (posts.length === 0) return;
+
+  const urlBase = window.location.href.split('#')[0];
+  const blogPostings = [];
+
+  posts.forEach(post => {
+    const fechaEl = post.querySelector('.fecha');
+    const tituloEl = post.querySelector('h3');
+    const parrafoEl = post.querySelector('p');
+    if (!tituloEl) return;
+
+    // La fecha viene como "[ FECHA: 2026.07.26 // LAYER_01 ]" -> extraemos YYYY.MM.DD
+    let fechaISO = null;
+    if (fechaEl) {
+      const match = fechaEl.textContent.match(/(\d{4})\.(\d{2})\.(\d{2})/);
+      if (match) fechaISO = `${match[1]}-${match[2]}-${match[3]}`;
+    }
+
+    blogPostings.push({
+      "@type": "BlogPosting",
+      "headline": tituloEl.textContent.trim(),
+      "url": `${urlBase}#${post.id}`,
+      ...(fechaISO ? { "datePublished": fechaISO } : {}),
+      "description": parrafoEl ? parrafoEl.textContent.trim().slice(0, 200) : ""
+    });
+  });
+
+  const datosLD = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "Layer 01 // WIRED ACCESS",
+    "url": urlBase,
+    "blogPost": blogPostings
+  };
+
+  // Si ya existe un bloque generado por nosotros, lo reemplazamos en vez de duplicarlo
+  const existente = document.getElementById('json-ld-blog');
+  if (existente) existente.remove();
+
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.id = 'json-ld-blog';
+  script.textContent = JSON.stringify(datosLD, null, 2);
+  document.head.appendChild(script);
+}
+
+/* ==========================================
+   5D. WIDGET DECORATIVO: NODE_PING
+   ------------------------------------------------
+   100% cosmético: simula líneas de "ping" a nodos
+   inventados de la Wired. No mide latencia real ni
+   se conecta a ningún servidor para esto.
+   ========================================== */
+const nodosFalsos = ['wired.node', 'psyche.layer', 'navi.core', 'protocol_7', 'copland.os'];
+function inicializarPingDecorativo() {
+  const contenedor = document.getElementById('ping-terminal');
+  if (!contenedor) return;
+
+  function agregarLinea() {
+    const nodo = nodosFalsos[Math.floor(Math.random() * nodosFalsos.length)];
+    const ms = Math.floor(Math.random() * 90 + 8);
+    const ok = ms < 70;
+    const linea = document.createElement('p');
+    linea.className = ok ? 'ping-ok' : 'ping-warn';
+    linea.textContent = `[ ${ok ? ' OK ' : 'WARN'} ] PING ${nodo}... ${ms}ms`;
+    contenedor.appendChild(linea);
+
+    // Mantener solo las últimas 5 líneas visibles
+    while (contenedor.children.length > 5) {
+      contenedor.removeChild(contenedor.firstChild);
+    }
+  }
+
+  agregarLinea();
+  setInterval(agregarLinea, 3500);
+}
+
+/* ==========================================
+   5E. MODO GLITCH TOTAL (decorativo, aleatorio y poco frecuente)
+   ------------------------------------------------
+   Cada cierto tiempo (entre ~45s y ~105s) agrega por 1.2s una
+   clase al <body> que dispara la animación glitchTotal del CSS
+   (aberración cromática + desplazamiento + recorte). Se detiene
+   solo con setTimeout, no interfiere con el resto del sitio.
+   No se dispara si el visitante tiene "modo lectura" activo,
+   para no interrumpir la lectura.
+   ========================================== */
+function inicializarGlitchTotal() {
+  function dispararGlitch() {
+    const desactivado = localStorage.getItem('glitch_off') === 'true';
+    if (!desactivado && !document.body.classList.contains('modo-lectura')) {
+      document.body.classList.add('glitch-total-activo');
+      setTimeout(() => document.body.classList.remove('glitch-total-activo'), 1300);
+    }
+    const proximoEn = 45000 + Math.random() * 60000; // entre 45s y 105s
+    setTimeout(dispararGlitch, proximoEn);
+  }
+  // Primer disparo entre 20s y 40s después de cargar (no apenas entra)
+  setTimeout(dispararGlitch, 20000 + Math.random() * 20000);
+}
+
+// Activa/desactiva el modo glitch total desde el widget VIEW_OPTIONS.
+// Se guarda en localStorage para que la preferencia se recuerde entre visitas.
+function alternarModoGlitch() {
+  const apagadoActual = localStorage.getItem('glitch_off') === 'true';
+  const nuevoApagado = !apagadoActual;
+  localStorage.setItem('glitch_off', nuevoApagado);
+
+  // Si lo están apagando justo en medio de un glitch, lo corta al instante
+  if (nuevoApagado) {
+    document.body.classList.remove('glitch-total-activo');
+  }
+
+  actualizarBotonModoGlitch();
+}
+
+function actualizarBotonModoGlitch() {
+  const btn = document.getElementById('btn-glitch-toggle');
+  if (!btn) return;
+  const apagado = localStorage.getItem('glitch_off') === 'true';
+  btn.textContent = apagado ? '[ GLITCH: OFF ]' : '[ GLITCH: ON ]';
+}
+
 function compartirPagina() {
   const url = window.location.href;
 
@@ -673,6 +808,19 @@ alCargarDOM(() => {
 
   // 7.10 Widget de logros de comandos secretos (recuerda lo ya encontrado)
   actualizarWidgetSecretos();
+
+  // 7.11 JSON-LD para SEO (se genera solo a partir de los posts existentes)
+  generarJSONLD();
+
+  // 7.12 Widget decorativo de "ping" de red (100% visual, no mide nada real)
+  inicializarPingDecorativo();
+
+  // 7.13 Contador de comentarios por post (cuántos hay, sin cargarlos aún)
+  inicializarContadoresComentarios();
+
+  // 7.14 Modo glitch total (decorativo, se dispara solo cada tanto)
+  inicializarGlitchTotal();
+  actualizarBotonModoGlitch();
 });
 
 /* ==========================================
@@ -1345,4 +1493,207 @@ async function cargarEntradasGuest() {
 
     contenedor.appendChild(card);
   });
+}
+
+/* ==========================================
+   18. COMENTARIOS POR POST (SUPABASE, tabla "comentarios")
+   ------------------------------------------------
+   Usa una tabla separada de la del guestbook, con una
+   columna post_id que la liga a cada <article class="post">
+   por su id (post-1, post-2, ...). Ver
+   supabase_setup_4_comentarios.sql para crear la tabla.
+   ========================================== */
+
+// Recordar qué post-id ya cargó sus comentarios, para no pedirlos de nuevo cada vez que se abre/cierra
+const comentariosYaCargados = new Set();
+
+// --- LÍMITE DE REACCIONES POR PERSONA EN COMENTARIOS (guardado en este navegador) ---
+// Misma idea que en el guestbook.html: se guarda en localStorage qué ids de
+// comentarios ya recibieron like/reporte desde este navegador, para no dejar
+// repetir la reacción. Usa una clave distinta a la del guestbook.
+function obtenerReaccionesLocalesComentarios() {
+  try {
+    const datos = JSON.parse(localStorage.getItem('wired_reacciones_comentarios'));
+    return datos && datos.likes && datos.reportes ? datos : { likes: [], reportes: [] };
+  } catch (e) {
+    return { likes: [], reportes: [] };
+  }
+}
+
+function guardarReaccionLocalComentario(campo, id) {
+  const datos = obtenerReaccionesLocalesComentarios();
+  if (!datos[campo].includes(id)) datos[campo].push(id);
+  localStorage.setItem('wired_reacciones_comentarios', JSON.stringify(datos));
+}
+
+function alternarComentarios(postId, btn) {
+  const contenedor = document.getElementById(`comentarios-${postId}`);
+  if (!contenedor) return;
+
+  const abrir = contenedor.style.display === 'none';
+  contenedor.style.display = abrir ? 'block' : 'none';
+
+  if (btn) {
+    const contadorSpan = btn.querySelector('.contador-comentarios');
+    const textoContador = contadorSpan ? contadorSpan.outerHTML : '';
+    btn.innerHTML = (abrir ? '[ OCULTAR COMENTARIOS ' : '[ VER COMENTARIOS ') + textoContador + ' ]';
+  }
+
+  if (abrir && !comentariosYaCargados.has(postId)) {
+    cargarComentarios(postId);
+  }
+}
+
+async function cargarComentarios(postId) {
+  const lista = document.getElementById(`comentarios-lista-${postId}`);
+  if (!lista || !supabaseClient) return;
+
+  lista.innerHTML = '<p style="color:#00f0ff; font-size:0.75rem;">Sincronizando con el nodo...</p>';
+
+  const { data: comentarios, error } = await supabaseClient
+    .from('comentarios')
+    .select('*')
+    .eq('post_id', postId)
+    .order('created_at', { ascending: true });
+
+  if (error) {
+    console.error('Error al consultar comentarios:', error);
+    lista.innerHTML = '<p style="color:#ff0055; font-size:0.75rem;">Error de conexión con la red.</p>';
+    return;
+  }
+
+  comentariosYaCargados.add(postId);
+  lista.innerHTML = '';
+
+  if (!comentarios || comentarios.length === 0) {
+    lista.innerHTML = '<p style="color:#666; font-size:0.75rem;">Aún no hay comentarios en esta entrada. ¡Sé el primero!</p>';
+  } else {
+    const reaccionesLocales = obtenerReaccionesLocalesComentarios();
+
+    comentarios.forEach(c => {
+      const item = document.createElement('div');
+      item.className = 'comentario-item';
+      const fecha = new Date(c.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' });
+
+      const yaDioLike = reaccionesLocales.likes.includes(c.id);
+      const yaReporto = reaccionesLocales.reportes.includes(c.id);
+
+      item.innerHTML = `
+        <div class="comentario-cabecera">
+          <span>> ${c.nombre || 'Anónimo_Wired'}</span>
+          <span class="comentario-fecha">${fecha}</span>
+        </div>
+        <p class="comentario-texto"></p>
+        <div class="comentario-reacciones" style="display:flex; gap:8px; margin-top:6px; align-items:center;">
+          <button data-id="${c.id}" data-accion="like" ${yaDioLike ? 'disabled' : ''} style="background: transparent; color: #ff0055; border: 1px solid #ff0055; padding: 2px 8px; font-size: 0.7rem; cursor: pointer; ${yaDioLike ? 'opacity: 0.5; cursor: not-allowed;' : ''}">❤ <span data-likes>${c.likes || 0}</span></button>
+          <button data-id="${c.id}" data-accion="reportar" ${yaReporto ? 'disabled' : ''} style="background: transparent; color: #666; border: 1px solid #666; padding: 2px 8px; font-size: 0.7rem; cursor: pointer; ${yaReporto ? 'opacity: 0.5; cursor: not-allowed;' : ''}">${yaReporto ? '🚩 Reportado' : '🚩 Reportar'}</button>
+        </div>
+      `;
+      // Se asigna como texto (no innerHTML) para no permitir HTML/scripts inyectados en el mensaje
+      item.querySelector('.comentario-texto').textContent = c.mensaje;
+
+      item.querySelector('[data-accion="like"]').addEventListener('click', (ev) => {
+        reaccionarComentario(c.id, 'likes', ev.currentTarget);
+      });
+      item.querySelector('[data-accion="reportar"]').addEventListener('click', (ev) => {
+        reaccionarComentario(c.id, 'reportes', ev.currentTarget, true);
+      });
+
+      lista.appendChild(item);
+    });
+  }
+
+  actualizarContadorComentarios(postId, (comentarios || []).length);
+}
+
+async function enviarComentario(postId, btn) {
+  if (!supabaseClient) {
+    alert('No hay conexión con el servidor Supabase.');
+    return;
+  }
+
+  const contenedor = document.getElementById(`comentarios-${postId}`);
+  if (!contenedor) return;
+
+  const nombreInput = contenedor.querySelector('.comentario-nombre');
+  const mensajeInput = contenedor.querySelector('.comentario-mensaje');
+
+  const nombre = nombreInput ? nombreInput.value.trim().slice(0, 40) : '';
+  const mensaje = mensajeInput ? mensajeInput.value.trim().slice(0, 500) : '';
+
+  if (!mensaje) {
+    alert('Escribe un comentario antes de transmitirlo a la red.');
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from('comentarios')
+    .insert([{ post_id: postId, nombre: nombre || 'Anónimo_Wired', mensaje: mensaje }]);
+
+  if (error) {
+    console.error('Error al guardar comentario:', error);
+    alert('Error al conectar con el nodo central.');
+    return;
+  }
+
+  if (mensajeInput) mensajeInput.value = '';
+  comentariosYaCargados.delete(postId); // forzar recarga completa para traer el nuevo comentario
+  cargarComentarios(postId);
+}
+
+// Suma 1 al campo indicado ('likes' o 'reportes') de un comentario.
+// Usa las funciones RPC seguras (sumar_like_comentario / sumar_reporte_comentario)
+// en vez de un UPDATE directo, igual que se hace con las firmas del guestbook,
+// para que un visitante solo pueda sumar +1 y nunca reescribir el comentario ajeno.
+// Ver supabase_setup_5_comentarios_reacciones.sql.
+async function reaccionarComentario(id, campo, boton, esReporte = false) {
+  if (!supabaseClient) return;
+  boton.disabled = true;
+
+  const nombreFuncion = esReporte ? 'sumar_reporte_comentario' : 'sumar_like_comentario';
+  const { error: errorRpc } = await supabaseClient.rpc(nombreFuncion, { fila_id: id });
+
+  if (errorRpc) {
+    console.error('Error al reaccionar al comentario:', errorRpc);
+    boton.disabled = false;
+    return;
+  }
+
+  if (esReporte) {
+    boton.textContent = '🚩 Reportado';
+  } else {
+    const spanLikes = boton.querySelector('[data-likes]');
+    if (spanLikes) spanLikes.textContent = (parseInt(spanLikes.textContent, 10) || 0) + 1;
+  }
+
+  // Se guarda para que esta persona no pueda repetir la reacción en este comentario
+  guardarReaccionLocalComentario(campo, id);
+  boton.disabled = true;
+  boton.style.opacity = '0.5';
+  boton.style.cursor = 'not-allowed';
+}
+
+function actualizarContadorComentarios(postId, cantidad) {
+  document.querySelectorAll(`.contador-comentarios[data-post-id="${postId}"]`).forEach(span => {
+    span.textContent = `(${cantidad})`;
+  });
+}
+
+// Al cargar la página, pedimos solo la CANTIDAD de comentarios de cada post (no el contenido)
+// para mostrar el número en el botón sin gastar de más antes de que el usuario abra la sección.
+async function inicializarContadoresComentarios() {
+  if (!supabaseClient) return;
+  const spans = document.querySelectorAll('.contador-comentarios[data-post-id]');
+  const postIds = [...new Set([...spans].map(s => s.dataset.postId))];
+
+  for (const postId of postIds) {
+    const { count, error } = await supabaseClient
+      .from('comentarios')
+      .select('*', { count: 'exact', head: true })
+      .eq('post_id', postId);
+
+    if (!error && typeof count === 'number') {
+      actualizarContadorComentarios(postId, count);
+    }
+  }
 }
